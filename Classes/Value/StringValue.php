@@ -15,7 +15,7 @@ class StringValue extends \Classes\Value\Value {
     * @param mixed $value Input value
     * @return bool
     */
-    public function validateValueType($value) {
-       return is_string($value);
+    public function validateValueType(&$value) {
+       return settype($value, 'string');
    }
 }

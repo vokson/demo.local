@@ -21,7 +21,7 @@ class FloatValue extends \Classes\Value\NumericValue {
     * @param mixed $value Input value
     * @return bool
     */
-    public function validateValueType($value) {
-       return is_float($value);
+    public function validateValueType(&$value) {
+        return settype($value, 'float');
    }
 }

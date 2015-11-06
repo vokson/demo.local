@@ -39,13 +39,14 @@ abstract class Value {
      * 
      * @return void
      */
-    protected function validateValue($value) {
+    protected function validateValue(&$value) {
         //Check isset or not
         if (!isset($value)) {
             throw new \Classes\Exception\Value\EmptyArgumentException('Value is empty');
         }
         //Check type
         if (!$this->validateValueType($value)) {
+            
             throw new \Classes\Exception\Value\InvalidArgumentException('Type of value is invalid');
         }
     }
@@ -55,7 +56,7 @@ abstract class Value {
      * 
      * @param mixed $value Input Value
      */
-    abstract function validateValueType($value);
+    abstract function validateValueType(&$value);
     
     /*
      * Get value

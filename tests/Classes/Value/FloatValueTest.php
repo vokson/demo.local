@@ -63,9 +63,7 @@ class FloatValueTest extends \PHPUnit_Framework_TestCase
      * 
      * @expectedException \Classes\Exception\Value\InvalidArgumentException
      */
-    public function testSet_3()
-    {
-        $this->object->set('dsfd');
-        
-    }
+//    public function testSet_3()
+//    {
+//    }
 }

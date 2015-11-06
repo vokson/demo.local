@@ -63,9 +63,9 @@ class StringValueTest extends \PHPUnit_Framework_TestCase
      * 
      * @expectedException \Classes\Exception\Value\InvalidArgumentException
      */
-    public function testSet_3()
-    {
-        $this->object->set(1);
-        
-    }
+//    public function testSet_3()
+//    {
+//        $this->object->set(1);
+//        
+//    }
 }

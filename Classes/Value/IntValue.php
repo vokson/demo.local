@@ -15,7 +15,7 @@ class IntValue extends \Classes\Value\NumericValue {
     * @param mixed $value Input value
     * @return bool
     */
-    public function validateValueType($value) {
-       return is_int($value);
+    public function validateValueType(&$value) {
+       return settype($value, 'integer');
    }
 }

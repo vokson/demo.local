@@ -13,7 +13,7 @@ namespace Classes\Instance;
  *
  * @author Noskov Alexey
  */
-class Instance implements Interfaces\PropertyNameValidator {
+abstract class Instance implements Interfaces\PropertyNameValidator {
     /*
      * @param string UIN
      */
@@ -22,6 +22,9 @@ class Instance implements Interfaces\PropertyNameValidator {
      * @param Value[] associative array of properties
      */
     protected $properties = array(); 
+    
+    // Service print function
+    abstract public function servicePrint();
     
     /*
      * Construct new objct of class
@@ -73,6 +76,7 @@ class Instance implements Interfaces\PropertyNameValidator {
      * @return void
      */
     public function setProperty($propertyName, $value) {
+//        echo "Instance Class: propertyName = ". $propertyName. "; value = ".$value->get()."<br/>";
         
         $this->validatePropertyNameType($propertyName);
         
@@ -94,13 +98,14 @@ class Instance implements Interfaces\PropertyNameValidator {
      * 
      * @return bool
      */
-    public function validateProperty($propertyName) {
+    public function validateProperty($propertyName, &$propertyClass = NULL) {
         
         $this->validatePropertyNameType($propertyName);
         
 //        var_dump($this->validPropertyNames);
 
         if (isset($this->validPropertyNames[$propertyName])) {
+            $propertyClass = $this->validPropertyNames[$propertyName];
             return TRUE;
         } else {
             return FALSE;
@@ -123,5 +128,6 @@ class Instance implements Interfaces\PropertyNameValidator {
         }
         return TRUE;
     }
+    
     
 }
