@@ -19,13 +19,16 @@ class Model {
      * @return void
      */
     public static function addInstance($object) {
+        
+        $uin = $object->getUin();
+        
         // NODE
         if ($object instanceof \Classes\Instance\Node\Node) {
-            self::$nodes[] = $object;
+            self::$nodes[$uin] = $object;
         }
         // MEMBER
         if ($object instanceof \Classes\Instance\Member\Member) {
-            self::$members[] = $object;
+            self::$members[$uin] = $object;
         }
     }
     
@@ -34,7 +37,7 @@ class Model {
      * 
      * @return \Classes\Instance\Node\Node[] Array of nodes
      */
-    public static function getNodes() {
+    public static function &getNodes() {
         return self::$nodes;
     }
     
@@ -43,7 +46,7 @@ class Model {
      * 
      * @return \Classes\Instance\Memeber\Member[] Array of members
      */
-    public static function getMembers() {
+    public static function &getMembers() {
         return self::$members;
     }
     

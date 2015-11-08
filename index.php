@@ -38,7 +38,6 @@ try {
         
         // MEMBER
         $member = new \Classes\Instance\Member\Member();
-        $member->setProperty('id',$commonMember->getProperty('id'));
         $member->setProperty('betaAngle',$commonMember->getProperty('betaAngle'));
         
         // SECTION
@@ -68,16 +67,16 @@ try {
         
     }
     
+    // NUMERATION
+    Classes\Utils\Numeration::numerateNodes();
+    Classes\Utils\Numeration::numerateMembers();
+    
     // Print
     Classes\Factory\Model\Model::servicePrint();
     
     echo '<hr />';
     
-//    foreach ($nodes as $object ) {
-//        Classes\Factory\Model\Model::addInstance($object);
-//    }
-//    
-//    Classes\Factory\Export\Scad21ExportFactory::export("Model.cpp");
+    Classes\Factory\Export\Scad21ExportFactory::export("Model.cpp");
     
 } catch (Exception $e) {
     echo "Exception: " . $e->getMessage() . "</br>";

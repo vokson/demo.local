@@ -17,18 +17,18 @@ class PinConnection extends Connection{
            
     /*
      * Constructor from STRING with format "010010"
-     * If input isn't correct create "000000" connection
+     * If input isn't correct create connection without pin
      * 
      * @param string $value Input string
      */
      function __construct($value) {
-        // Set 000000
-        $this->connection = array(0,0,0,0,0,0);
+        // Set ZERO pin
+        $this->connection = 0;
         
         // Check 1 in STRING
         if (is_string($value) && strlen($value) >= 6) {
             for ($i=0; $i<6; $i++){
-                if ($value[$i] == "1") {$this->connection[$i] = 1;}
+                if ($value[$i] == "1") {$this->connection += pow(2,$i);}
             }
         }
     }

@@ -25,6 +25,11 @@ class Node extends \Classes\Instance\Instance {
         'z' => '\Classes\Value\FloatValue'
     );
     
+    public function __construct() {
+        parent::__construct();
+        $this->setProperty('name', new \Classes\Value\StringValue(''));
+    }
+    
     /*
      * PRINT
      */

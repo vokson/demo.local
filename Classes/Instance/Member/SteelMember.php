@@ -18,7 +18,6 @@ class SteelMember extends \Classes\Instance\Instance {
      * $param string[] valid property names
      */
     protected $validPropertyNames = array(
-        'id' => '\Classes\Value\IntValue' ,
         'name' => '\Classes\Value\StringValue',
         'x1' => '\Classes\Value\FloatValue',
         'y1' => '\Classes\Value\FloatValue',
@@ -28,9 +27,10 @@ class SteelMember extends \Classes\Instance\Instance {
         'z2' => '\Classes\Value\FloatValue',
         'pin1' => '\Classes\Value\StringValue',
         'pin2' => '\Classes\Value\StringValue',
-        'betaAngle' => '\Classes\Value\FloatValue',
+        'betaAngle' => '\Classes\Value\IntValue',
         'sectionType' => '\Classes\Value\StringValue',
-        'sectionName' => '\Classes\Value\StringValue'
+        'sectionName' => '\Classes\Value\StringValue',
+        'isDivided' => '\Classes\Value\IntValue'
     );
     
     /*

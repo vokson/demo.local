@@ -20,9 +20,14 @@ class Member extends \Classes\Instance\Instance {
     protected $validPropertyNames = array(
         'id' => '\Classes\Value\IntValue' ,
         'name' => '\Classes\Value\StringValue',
-        'betaAngle' => '\Classes\Value\FloatValue',
+        'betaAngle' => '\Classes\Value\IntValue',
         'section' => '\Classes\Value\StringValue'
     );
+    
+    public function __construct() {
+        parent::__construct();
+        $this->setProperty('name', new \Classes\Value\StringValue(''));
+    }
     
     /*
      * PRINT

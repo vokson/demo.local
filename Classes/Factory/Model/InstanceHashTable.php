@@ -37,15 +37,19 @@ class InstanceHashTable {
     /*
      * Remove connection from Hash Table
      * 
-     * @param string $uinSource Connection will be added FROM this UIN
-     * @param string $uinTarget Connection will be added TO this UIN
+     * @param string $uin1 Instance's UIN
+     * @param string $uin2 Instance's UIN
      */
-    public function removeConnection($uinSource, $uinTarget) {
-        if (is_string($uinSource) &&
-            is_string($uinTarget)) {
+    public function removeConnection($uin1, $uin2) {
+        if (is_string($uin1) &&
+            is_string($uin2)) {
             
-            if (isset($this->table[$uinSource][$uinTarget])) {
-                unset($this->table[$uinSource][$uinTarget]);
+            if (isset($this->table[$uin1][$uin2])) {
+                unset($this->table[$uin1][$uin2]);
+            }
+            
+            if (isset($this->table[$uin2][$uin1])) {
+                unset($this->table[$uin2][$uin1]);
             }
         }
     }
@@ -81,7 +85,7 @@ class InstanceHashTable {
     public function servicePrint() {
         foreach ($this->table as $sourceUin => $array) {
             foreach ($array as $targetUin => $connection) {
-                echo $sourceUin . " > " . $targetUin . " = " . implode("",$connection->get()) . "<br/>";
+                echo $sourceUin . " > " . $targetUin . " = " . $connection->get() . "<br/>";
             }
         }
     }
