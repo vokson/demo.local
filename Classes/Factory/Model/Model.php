@@ -16,7 +16,7 @@ class Model {
     public static $hashTable; // Table of connection btw instances;
 
     /*
-     * Setter for nodes collection
+     * Adв Instance
      * 
      * @param \Classes\Instance\Node\Node $object Object to be added to Model
      * @return void
@@ -33,6 +33,29 @@ class Model {
         if ($object instanceof \Classes\Instance\Member\Member) {
             self::$members[$uin] = $object;
         }
+    }
+    
+    /*
+     * Delete Instance
+     * 
+     * @param string $uin
+     * 
+     * @return bool
+     */
+    public static function deleteInstance($uin) {
+        
+        // NODE
+        if (isset(self::$nodes[$uin])) {
+            unset(self::$nodes[$uin]);
+            return TRUE;
+        }
+        // MEMBER
+        if (isset(self::$members[$uin])) {
+            unset(self::$members[$uin]);
+            return TRUE;
+        }
+        
+        return FALSE;
     }
     
     /*

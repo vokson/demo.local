@@ -90,6 +90,7 @@ class DoubleNodes {
     public function combineAll() {
         // FIND
         self::find();
+//        self::servicePrint();
         
         //COMBINE
         foreach (self::$uins as $uinArray) {
@@ -109,14 +110,31 @@ class DoubleNodes {
      */
     
     private static function combineTwoNodes($uinKeep, $uinAttach) {
+//        echo "COMBINE TWO NODES KEEP = $uinKeep, ATTACH = $uinAttach<br/>";
         
         //DELETE NODE
-        $nodes = \Classes\Factory\Model\Model::getNodes();
-        unset($nodes[$uinAttach]);
+        \Classes\Factory\Model\Model::deleteInstance($uinAttach);
         
         //CHANGE HASSH TABLE
         $hashTable = \Classes\Factory\Model\Model::getHashTable();
         $hashTable->replaceUin($uinAttach, $uinKeep);
+        
+//        \Classes\Factory\Model\Model::servicePrint();
+    }
+    
+    /*
+     * PRINT
+     */
+    public static function servicePrint() {
+        
+       echo "+++ DOUBLE NODES +++<br/>";
+        
+        for ($i=0; $i < count(self::$coordinates); $i++) {
+            $x = self::$coordinates[$i][0];
+            $y = self::$coordinates[$i][1];
+            $z = self::$coordinates[$i][2];
+            echo "($x, $y, $z) - ". implode(',', self::$uins[$i]) ."<br/>";
+        }
     }
     
 }

@@ -63,19 +63,16 @@ try {
         $hashTable->setConnection($node1->getUin(), $member->getUin(), $pin1);
         $hashTable->setConnection($node2->getUin(), $member->getUin(), $pin2);
         
+        
     }
+    
+    // DELETE DOUBLE NODES
+    Classes\Utils\Node\DoubleNodes::combineAll();
     
     // NUMERATION
     \Classes\Utils\Member\Numeration::numerateFromOne();
     \Classes\Utils\Node\Numeration::numerateFromOne();
-    
-    // Print
-    Classes\Factory\Model\Model::servicePrint();
-    
-    echo '<hr />';
-    
-    Classes\Utils\Node\DoubleNodes::combineAll();
-    
+   
     // Print
     Classes\Factory\Model\Model::servicePrint();
     
