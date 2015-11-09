@@ -8,6 +8,9 @@ namespace Classes\Factory\Model;
  * @author Noskov Alexey
  */
 class Model {
+    
+    const coordinateTolerance = 0.01; //Tolerance in meters
+    
     private static $nodes = array(); // Collection of nodes in model
     private static $members = array(); // Collection of rod members in model
     public static $hashTable; // Table of connection btw instances;

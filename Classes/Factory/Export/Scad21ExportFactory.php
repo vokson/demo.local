@@ -55,8 +55,13 @@ class Scad21ExportFactory extends ExportFactory {
             
             // Get PINS
             $pins = array_values($objectConnections);
-            $pin1 = $pins[0]->get();
-            $pin2 = $pins[1]->get();
+            $pin1 = $pin2 = 0;
+            if ($pins[0] instanceof \Classes\Factory\Connection\PinConnection) {
+                $pin1 = $pins[0]->get();
+            }
+            if ($pins[1] instanceof \Classes\Factory\Connection\PinConnection) {
+                $pin2 = $pins[1]->get();
+            }
             
             $txt[] = "this->members.push_back(Member($id, $name, $node1, $node2, $pin1, $pin2, $betaAngle, $section));";
         }

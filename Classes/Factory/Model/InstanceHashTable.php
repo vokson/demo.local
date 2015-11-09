@@ -80,6 +80,36 @@ class InstanceHashTable {
     }
     
     /*
+     * Replace UIN in HASH TABLE
+     * 
+     * @param string $from Instance's UIN
+     * @param string $to Instance's UIN
+     */
+    public function replaceUin($from, $to) {
+        
+        // Get connection related to uin1
+        $connections = $this->getConnection($from);
+        
+        // Modify $to
+        if (isset($this->table[$to])) {
+            // Add $connections to $to
+            $this->table[$to] = array_merge($this->table[$to], $connections);
+        } else {
+            // Set $connection into $to
+            $this->table[$to] = $connections;
+        }
+        
+        // Delete $from
+        unset($this->table[$from]);
+        
+        // Change opposite connections
+        foreach ($connections as $uin => $connect) {
+            unset($this->table[$uin][$from]);
+            $this->table[$uin][$to] = $connect;
+        }
+    }
+    
+    /*
      * Print Hash Table
      */
     public function servicePrint() {

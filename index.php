@@ -6,8 +6,6 @@ spl_autoload_register();
 /** PHPExcel_IOFactory */
 include 'Classes/PHPExcel/IOFactory.php';
 
-
-
 try {
     $inputFileName = './Source/Excel/Frame_01.xlsx';
 //    $objPHPExcel = \PHPExcel_IOFactory::load($inputFileName);
@@ -68,8 +66,15 @@ try {
     }
     
     // NUMERATION
-    Classes\Utils\Numeration::numerateNodes();
-    Classes\Utils\Numeration::numerateMembers();
+    \Classes\Utils\Member\Numeration::numerateFromOne();
+    \Classes\Utils\Node\Numeration::numerateFromOne();
+    
+    // Print
+    Classes\Factory\Model\Model::servicePrint();
+    
+    echo '<hr />';
+    
+    Classes\Utils\Node\DoubleNodes::combineAll();
     
     // Print
     Classes\Factory\Model\Model::servicePrint();
