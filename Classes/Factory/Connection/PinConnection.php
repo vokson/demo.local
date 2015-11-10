@@ -14,6 +14,8 @@ namespace Classes\Factory\Connection;
  * @author Noskov Alexey
  */
 class PinConnection extends Connection{
+    
+    private $connection = 0;
            
     /*
      * Constructor from STRING with format "010010"
@@ -22,9 +24,6 @@ class PinConnection extends Connection{
      * @param string $value Input string
      */
      function __construct($value) {
-        // Set ZERO pin
-        $this->connection = 0;
-        
         // Check 1 in STRING
         if (is_string($value) && strlen($value) >= 6) {
             for ($i=0; $i<6; $i++){

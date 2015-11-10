@@ -35,6 +35,15 @@ abstract class Instance implements Interfaces\PropertyNameValidator {
         $this->uin = uniqid('', TRUE);
     }
     
+    /*
+     * Refresh Uin
+     * It's necessary when you want to copy Instance
+     */
+    public function newUin() {
+        $this->uin = uniqid('', TRUE);
+    }
+    
+    
     
     /*
      * Get UIN

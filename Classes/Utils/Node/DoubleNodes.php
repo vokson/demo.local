@@ -29,9 +29,11 @@ class DoubleNodes {
         foreach ($nodes as $node) {
             
             // Get $node coordinates
-            $xNode = $node->getProperty('x')->get();
-            $yNode = $node->getProperty('y')->get();
-            $zNode = $node->getProperty('z')->get();
+            $pointNode = new \Classes\Utils\AbstractInstance\Point(
+                    $node->getProperty('x')->get(),
+                    $node->getProperty('y')->get(),
+                    $node->getProperty('z')->get()
+                    );
             
             $isFound = false;
             $i = 0;
@@ -39,12 +41,14 @@ class DoubleNodes {
             while ($i < count(self::$coordinates) && $isFound === FALSE) {
                 
                 // Get coordinates of checked node
-                $xExist = self::$coordinates[$i][0];
-                $yExist = self::$coordinates[$i][1];
-                $zExist = self::$coordinates[$i][2];
+                $pointExist = new \Classes\Utils\AbstractInstance\Point(
+                    self::$coordinates[$i][0],
+                    self::$coordinates[$i][1],
+                    self::$coordinates[$i][2]
+                    );
                 
                 // Check same point or not
-                $isPointSame = \Classes\Utils\Math\Points::isPointSame($xNode, $yNode, $zNode, $xExist, $yExist, $zExist);
+                $isPointSame = \Classes\Utils\Math\Points::isPointSame($pointNode, $pointExist);
                 
                 // SAME
                 if ($isPointSame) {
@@ -58,7 +62,7 @@ class DoubleNodes {
             // NOT FOUND
             if (!$isFound) {
                 // ADD to existing nodes
-                self::$coordinates[] = array($xNode, $yNode, $zNode);
+                self::$coordinates[] = array($pointNode->x, $pointNode->y, $pointNode->z);
                 self::$uins[] = array($node->getUin());
             }
         }
