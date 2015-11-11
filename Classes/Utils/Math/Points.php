@@ -66,12 +66,28 @@ class Points {
         $p = array();
         if (!Constant::isNumbersEqual($dx, 0)) {
             $p[] = ($point->x - $line->point2->x) / $dx;
+        } else {
+            // X coordinate of all point must be same
+            if (!Constant::isNumbersEqual($point->x, $line->point1->x)) {
+                return 0;
+            }
         }
         if (!Constant::isNumbersEqual($dy, 0)) {
             $p[] = ($point->y - $line->point2->y) / $dy;
+        } else {
+            // Y coordinate of all point must be same
+            if (!Constant::isNumbersEqual($point->y, $line->point1->y)) {
+                return 0;
+            }
         }
+        
         if (!Constant::isNumbersEqual($dz, 0)) {
             $p[] = ($point->z - $line->point2->z) / $dz;
+        } else {
+            // Z coordinate of all point must be same
+            if (!Constant::isNumbersEqual($point->z, $line->point1->z)) {
+                return 0;
+            }
         }
         
         // CASE 4

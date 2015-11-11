@@ -6,27 +6,26 @@ spl_autoload_register();
 /** PHPExcel_IOFactory */
 include 'Classes/PHPExcel/IOFactory.php';
 
-$member1 = new \Classes\Instance\Member\Member();
-$member1->setProperty('betaAngle', new \Classes\Value\IntValue(10));
-
-$member2 = new \Classes\Instance\Member\Member();
-$member2->setProperty('betaAngle', new \Classes\Value\IntValue(20));
-
-\Classes\Factory\Model\Model::addInstance($member1);
-\Classes\Factory\Model\Model::addInstance($member2);
-
-$members = \Classes\Factory\Model\Model::getMembers();
-$uins = array_keys($members);
-
-$newMember = $members[$uins[0]];
-$newMember->setProperty('betaAngle', new \Classes\Value\IntValue(30));
-$newMember->newUin();
-
-\Classes\Factory\Model\Model::addInstance($newMember);
-
-print_r(\Classes\Factory\Model\Model::getMembers());
-
-\Classes\Factory\Model\Model::servicePrint();
+//$member1 = new \Classes\Instance\Member\Member();
+//$member1->setProperty('betaAngle', new \Classes\Value\IntValue(10));
+//
+//$member2 = new \Classes\Instance\Member\Member();
+//$member2->setProperty('betaAngle', new \Classes\Value\IntValue(20));
+//
+//\Classes\Factory\Model\Model::addInstance($member1);
+//\Classes\Factory\Model\Model::addInstance($member2);
+//
+//$members = \Classes\Factory\Model\Model::getMembers();
+//$uins = array_keys($members);
+//
+//$newMember = clone $members[$uins[0]];
+//$newMember->setProperty('betaAngle', new \Classes\Value\IntValue(30));
+//
+//\Classes\Factory\Model\Model::addInstance($newMember);
+//
+//print_r(\Classes\Factory\Model\Model::getMembers());
+//
+//\Classes\Factory\Model\Model::servicePrint();
 
 
 
@@ -62,6 +61,7 @@ try {
         // MEMBER
         $member = new \Classes\Instance\Member\Member();
         $member->setProperty('betaAngle',$commonMember->getProperty('betaAngle'));
+        $member->setProperty('name',$commonMember->getProperty('name'));
         
         // SECTION
         if (\Classes\Utils\SectionType::steelProfile($sectionString,

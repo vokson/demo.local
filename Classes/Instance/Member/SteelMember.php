@@ -33,6 +33,11 @@ class SteelMember extends \Classes\Instance\Instance {
         'isDivided' => '\Classes\Value\IntValue'
     );
     
+    public function __construct() {
+        parent::__construct();
+        $this->setProperty('name', new \Classes\Value\StringValue(''));
+    }
+    
     /*
      * PRINT
      */

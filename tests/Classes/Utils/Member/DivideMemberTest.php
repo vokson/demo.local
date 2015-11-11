@@ -21,22 +21,22 @@ class DivideMemberTest extends \PHPUnit_Framework_TestCase
         $node1 = new \Classes\Instance\Node\Node();
         $this->node1Uin = $node1->getUin();
         $node1->setProperty('x', new \Classes\Value\FloatValue(0));
-        $node1->setProperty('y', new \Classes\Value\FloatValue(0));
+        $node1->setProperty('y', new \Classes\Value\FloatValue(3));
         $node1->setProperty('z', new \Classes\Value\FloatValue(0));
         
         // NODE 2
         $node2 = new \Classes\Instance\Node\Node();
         $this->node2Uin = $node2->getUin();
-        $node2->setProperty('x', new \Classes\Value\FloatValue(5));
-        $node2->setProperty('y', new \Classes\Value\FloatValue(5));
+        $node2->setProperty('x', new \Classes\Value\FloatValue(0));
+        $node2->setProperty('y', new \Classes\Value\FloatValue(3));
         $node2->setProperty('z', new \Classes\Value\FloatValue(5));
         
         // NODE 3
         $node3 = new \Classes\Instance\Node\Node();
         $this->node3Uin = $node3->getUin();
-        $node3->setProperty('x', new \Classes\Value\FloatValue(2));
-        $node3->setProperty('y', new \Classes\Value\FloatValue(2));
-        $node3->setProperty('z', new \Classes\Value\FloatValue(2));
+        $node3->setProperty('x', new \Classes\Value\FloatValue(0));
+        $node3->setProperty('y', new \Classes\Value\FloatValue(0));
+        $node3->setProperty('z', new \Classes\Value\FloatValue(0.5));
         
         // MEMBER
         $member1 = new \Classes\Instance\Member\Member();

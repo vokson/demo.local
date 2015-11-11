@@ -36,13 +36,20 @@ abstract class Instance implements Interfaces\PropertyNameValidator {
     }
     
     /*
-     * Refresh Uin
-     * It's necessary when you want to copy Instance
+     * Clone of object
      */
-    public function newUin() {
+    function __clone() {
         $this->uin = uniqid('', TRUE);
     }
     
+    /*
+     * Refresh Uin
+     * It's necessary when you want to copy Instance
+     */
+//    public function newUin() {
+//        $this->uin = uniqid('', TRUE);
+//    }
+//    
     
     
     /*
