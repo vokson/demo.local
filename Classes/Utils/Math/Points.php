@@ -51,36 +51,58 @@ class Points {
      * 
      * @return int
      * 0 - ТОЧКА НЕ НА ПРЯМОЙ
-     * 1 - ТОЧКА НА ПРЯМОЙ
+     * 1 - ТОЧКА НА ПРЯМОЙ, НО НЕ НА ОТРЕЗКЕ
      * 2 - ТОЧКА НА КОНЦЕ ОТРЕЗКА
      * 3 - ТОЧКА ВНУТРИ ОТРЕЗКА
+     * 4 - ТОЧКА И ОБА КОНЦА - ЭТО ОДНА ТОЧКА
      */
     public static function isPointOnLine($point, $line) {
         
-        $px = ($point->x - $line->point2->x) / ($line->point1->x - $line->point2->x);
-        $py = ($point->y - $line->point2->y) / ($line->point1->y - $line->point2->y);
+        $dx = $line->point1->x - $line->point2->x;
+        $dy = $line->point1->y - $line->point2->y;
+        $dz = $line->point1->z - $line->point2->z;
         
-        if (!Constant::isNumbersEqual($px, $py)) {
-            return 0;
+        // Create array of p
+        $p = array();
+        if (!Constant::isNumbersEqual($dx, 0)) {
+            $p[] = ($point->x - $line->point2->x) / $dx;
+        }
+        if (!Constant::isNumbersEqual($dy, 0)) {
+            $p[] = ($point->y - $line->point2->y) / $dy;
+        }
+        if (!Constant::isNumbersEqual($dz, 0)) {
+            $p[] = ($point->z - $line->point2->z) / $dz;
         }
         
-        $pz = ($point->z - $line->point2->z) / ($line->point1->z - $line->point2->z);
+        // CASE 4
+        if (count($p) == 0) {return 4;}
         
-        if (!Constant::isNumbersEqual($px, $pz)) {
-            return 0;
+        // All members in p array must be same
+        $isEqual = TRUE;
+        if (count($p) > 1) {
+            for ($i=1; $i<count($p); $i++) {
+                if (!Constant::isNumbersEqual($p[$i], $p[0])) {
+                    $isEqual = FALSE;
+                }
+            }
         }
         
-        // Check ends or not
-        if (Constant::isNumbersEqual($px, 0) || Constant::isNumbersEqual($px, 1)) {
+        // CASE 0
+        if (!$isEqual) {
+            return 0;
+        }
+            
+        // CASE 2
+        if (Constant::isNumbersEqual($p[0], 0) || Constant::isNumbersEqual($p[0], 1)) {
             return 2;
         }
         
-        // Check inside or not
-        if ($px > 0 && $px < 1) {
+        // CASE 3
+        if ($p[0] > 0 && $p[0] < 1) {
             return 3;
         }
         
-        // Point is on long line
+        // CASE 1
         return 1;
     }
 }

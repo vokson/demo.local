@@ -6,6 +6,31 @@ spl_autoload_register();
 /** PHPExcel_IOFactory */
 include 'Classes/PHPExcel/IOFactory.php';
 
+$member1 = new \Classes\Instance\Member\Member();
+$member1->setProperty('betaAngle', new \Classes\Value\IntValue(10));
+
+$member2 = new \Classes\Instance\Member\Member();
+$member2->setProperty('betaAngle', new \Classes\Value\IntValue(20));
+
+\Classes\Factory\Model\Model::addInstance($member1);
+\Classes\Factory\Model\Model::addInstance($member2);
+
+$members = \Classes\Factory\Model\Model::getMembers();
+$uins = array_keys($members);
+
+$newMember = $members[$uins[0]];
+$newMember->setProperty('betaAngle', new \Classes\Value\IntValue(30));
+$newMember->newUin();
+
+\Classes\Factory\Model\Model::addInstance($newMember);
+
+print_r(\Classes\Factory\Model\Model::getMembers());
+
+\Classes\Factory\Model\Model::servicePrint();
+
+
+
+
 try {
     $inputFileName = './Source/Excel/Frame_01.xlsx';
 //    $objPHPExcel = \PHPExcel_IOFactory::load($inputFileName);
@@ -69,6 +94,9 @@ try {
     // DELETE DOUBLE NODES
     Classes\Utils\Node\DoubleNodes::combineAll();
     
+    // DIVIDE MEMBERS BY NODES
+    \Classes\Utils\Member\DivideMember::divideAllMembersByExistingNodes();
+    
     // NUMERATION
     \Classes\Utils\Member\Numeration::numerateFromOne();
     \Classes\Utils\Node\Numeration::numerateFromOne();
@@ -77,6 +105,8 @@ try {
     Classes\Factory\Model\Model::servicePrint();
     
     echo '<hr />';
+    
+    
     
     Classes\Factory\Export\Scad21ExportFactory::export("Model.cpp");
     

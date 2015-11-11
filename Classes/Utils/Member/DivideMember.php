@@ -15,7 +15,8 @@ class DivideMember {
      * @param string $memberUin Uin of member
      * @param string $nodeUin Uin of node
      * 
-     * @return bool Success or not
+     * @return bool FALSE If not successful
+     * @return string Uin of new member
      */
     public static function divideMemberByNode($memberUin, $nodeUin) {
         // Get nodes and members
@@ -43,27 +44,40 @@ class DivideMember {
         $hashTable->setConnection($memberUin, $nodeUin, $zeroPin);
         
         // Create newMember same as oldMember
-        $newMember = $members[$memberUin];
+        $newMember = clone $members[$memberUin];
+        echo "OLD MEMBER<br/>";
+        var_dump($members[$memberUin]);
+        echo "<br/>";
+        
+        echo "OLD UIN = $memberUin, NEW UIN = ".$newMember->getUin()."<br/>";
+        
         $newMember->newUin();
+        
+        echo "OLD UIN = $memberUin, NEW UIN = ".$newMember->getUin()."<br/>";
+        echo "<br/>";
+        
+        //Add member to Model
+        \Classes\Factory\Model\Model::addInstance($newMember);
         
         // Set 1st connection to newMember
         $hashTable->setConnection($newMember->getUin(), $nodeUin, $zeroPin);
         // Set 2nd connection to newMember
         $hashTable->setConnection($newMember->getUin(), $uin2, $con2);
         
-        return TRUE;
+        return $newMember->getUin();
     }
     
     /*
      * Divide one member by existing nodes
      * 
      * @param string $memberUin Uin of member
+     * @param Classes\Instance\Node\Node $nodes Array of nodes
      * 
      * @return bool Success or not
      */
-    public static function divideMemberByExistingNodes($memberUin) {
+    public static function divideMemberByNodes($memberUin, $nodes) {
         // Get nodes and members
-        $nodes = \Classes\Factory\Model\Model::getNodes();
+        $allNodes = \Classes\Factory\Model\Model::getNodes();
         $members = \Classes\Factory\Model\Model::getMembers();
         $hashTable = \Classes\Factory\Model\Model::getHashTable();
         
@@ -76,14 +90,14 @@ class DivideMember {
         // Get coordinates of members' ends
         $hash = $hashTable->getConnection($memberUin);
         
-        $node1 = array_keys($hash)[0];
+        $node1 = $allNodes[array_keys($hash)[0]];
         $point1 = new \Classes\Utils\AbstractInstance\Point(
                     $node1->getProperty('x')->get(),
                     $node1->getProperty('y')->get(),
                     $node1->getProperty('z')->get()
                     );
         
-        $node2 = array_keys($hash)[1];
+        $node2 = $allNodes[array_keys($hash)[1]];
         $point2 = new \Classes\Utils\AbstractInstance\Point(
                     $node2->getProperty('x')->get(),
                     $node2->getProperty('y')->get(),
@@ -92,7 +106,10 @@ class DivideMember {
         //Create Line
         $line = new \Classes\Utils\AbstractInstance\Line($point1, $point2);
         
-        foreach ($nodes as $node) {
+        foreach ($nodes as &$node) {
+            // UIN
+            $nodeUin = $node->getUin();
+            
             // Get $node coordinates
             $pointNode = new \Classes\Utils\AbstractInstance\Point(
                     $node->getProperty('x')->get(),
@@ -100,7 +117,33 @@ class DivideMember {
                     $node->getProperty('z')->get()
                     );
             
-            // RECURSION CHECK
+            // Delete node from array
+            unset($node);
+            
+            // If point is inside line
+            if (\Classes\Utils\Math\Points::isPointOnLine($pointNode, $line) == 3) {
+                
+                // Divide Member
+                $newMemberUin = self::divideMemberByNode($memberUin, $nodeUin);
+                
+                //Start to divide new member by remaining nodes
+                self::divideMemberByNodes($newMemberUin, $nodes);
+            }
+        }
+    }
+    
+    /*
+     * Divide all members by existing nodes
+     * 
+     * @return bool Success or not
+     */
+    public static function divideAllMembersByExistingNodes() {
+        // Get nodes and members
+        $nodes = \Classes\Factory\Model\Model::getNodes();
+        $members = \Classes\Factory\Model\Model::getMembers();
+        
+        foreach ($members as $member) {
+            self::divideMemberByNodes($member->getUin(), $nodes);
         }
     }
 }

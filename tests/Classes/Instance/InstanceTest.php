@@ -17,7 +17,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Instance();
+        $this->object = new Node\Node();
     }
 
     /**
