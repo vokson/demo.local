@@ -21,7 +21,8 @@ class Member extends \Classes\Instance\Instance {
         'id' => '\Classes\Value\IntValue' ,
         'name' => '\Classes\Value\StringValue',
         'betaAngle' => '\Classes\Value\IntValue',
-        'section' => '\Classes\Value\StringValue'
+        'section' => '\Classes\Value\StringValue',
+        'isDivided' => '\Classes\Value\BoolValue'
     );
     
     public function __construct() {

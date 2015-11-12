@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Classes\Factory\Model;
+namespace Classes\Factory\Model\Table;
 
 /**
  * Class to store depencies between instancies
  *
  * @author Noskov Alexey
  */
-class InstanceHashTable {
+class TwoDimensionalTable {
     private $table = array(); // array to store hash table
     
     /*
@@ -89,6 +89,11 @@ class InstanceHashTable {
         
         // Get connection related to uin1
         $connections = $this->getConnection($from);
+        
+        // If there is NOT connection
+        if (empty($connections)) {
+            return;
+        }
         
         // Modify $to
         if (isset($this->table[$to])) {

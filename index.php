@@ -6,41 +6,10 @@ spl_autoload_register();
 /** PHPExcel_IOFactory */
 include 'Classes/PHPExcel/IOFactory.php';
 
-//$member1 = new \Classes\Instance\Member\Member();
-//$member1->setProperty('betaAngle', new \Classes\Value\IntValue(10));
-//
-//$member2 = new \Classes\Instance\Member\Member();
-//$member2->setProperty('betaAngle', new \Classes\Value\IntValue(20));
-//
-//\Classes\Factory\Model\Model::addInstance($member1);
-//\Classes\Factory\Model\Model::addInstance($member2);
-//
-//$members = \Classes\Factory\Model\Model::getMembers();
-//$uins = array_keys($members);
-//
-//$newMember = clone $members[$uins[0]];
-//$newMember->setProperty('betaAngle', new \Classes\Value\IntValue(30));
-//
-//\Classes\Factory\Model\Model::addInstance($newMember);
-//
-//print_r(\Classes\Factory\Model\Model::getMembers());
-//
-//\Classes\Factory\Model\Model::servicePrint();
-
-
-
-
 try {
-    $inputFileName = './Source/Excel/Frame_01.xlsx';
-//    $objPHPExcel = \PHPExcel_IOFactory::load($inputFileName);
-//    $sheetData = $objPHPExcel->getActiveSheet()->toArray();
-//    var_dump($sheetData);
-//
-//    echo '<hr />';
-//
     $uploadFactory = new \Classes\Factory\Import\Instance\InstanceUploaderFromExcel();
-    $class = new \Classes\Instance\Member\SteelMember();
-    $array = $uploadFactory->upload($inputFileName, $class);
+    $array = $uploadFactory->upload('./Source/Excel/Frame_01.xlsx',
+            new \Classes\Instance\Member\SteelMember);
     
     foreach ($array as &$commonMember) {
 //        var_dump($commonMember);
@@ -61,6 +30,7 @@ try {
         // MEMBER
         $member = new \Classes\Instance\Member\Member();
         $member->setProperty('betaAngle',$commonMember->getProperty('betaAngle'));
+        $member->setProperty('isDivided',$commonMember->getProperty('isDivided'));
         $member->setProperty('name',$commonMember->getProperty('name'));
         
         // SECTION
@@ -96,6 +66,49 @@ try {
     
     // DIVIDE MEMBERS BY NODES
     \Classes\Utils\Member\DivideMember::divideAllMembersByExistingNodes();
+    
+    // APPLY CONSTRAINTS
+    $array = $uploadFactory->upload('./Source/Excel/Constraint_01.xlsx',
+            new \Classes\Instance\Node\Constraint);
+    
+    // GET NODES
+    $nodes = array_values(Classes\Factory\Model\Model::getNodes());
+    
+    //GET RESTRAINT TABLE
+    $resTable = Classes\Factory\Model\Model::getRestraintTable();
+    
+    foreach ($array as $constraint) {
+        // RESTRAINT
+        $restraint = new \Classes\Factory\Connection\RestraintConnection($constraint->getProperty('fix')->get());
+        
+        // RESTRAINT POINT
+        $resPoint = new Classes\Utils\AbstractInstance\Point(
+            $constraint->getProperty('x')->get(),
+            $constraint->getProperty('y')->get(),
+            $constraint->getProperty('z')->get()
+        );
+        
+        // TRY TO FIND NODE FOR RESTRAINT'S APPLICATION
+        $isFound = FALSE; $i=0;
+        while ($isFound === FALSE && $i < count($nodes)) {
+            $node = $nodes[$i];
+            
+            // NODE POINT
+            $nodePoint = new Classes\Utils\AbstractInstance\Point(
+                $node->getProperty('x')->get(),
+                $node->getProperty('y')->get(),
+                $node->getProperty('z')->get()
+            );
+            
+            if (\Classes\Utils\Math\Points::isPointSame($nodePoint, $resPoint)) {
+                // ADD CONNECTION
+                $resTable->setConnection($node->getUin(), $restraint);
+                $isFound = TRUE;
+            }
+            
+            $i++;
+        }
+    }
     
     // NUMERATION
     \Classes\Utils\Member\Numeration::numerateFromOne();

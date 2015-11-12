@@ -13,7 +13,7 @@ namespace Classes\Factory\Connection;
  *
  * @author Noskov Alexey
  */
-class PinConnection extends SixFreedomConnection{
+class RestraintConnection extends SixFreedomConnection{
     
     
 }

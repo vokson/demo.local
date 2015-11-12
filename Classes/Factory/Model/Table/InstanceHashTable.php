@@ -6,14 +6,13 @@
  * and open the template in the editor.
  */
 
-namespace Classes\Factory\Connection;
+namespace Classes\Factory\Model\Table;
 
 /**
- * Description of PinConnection
+ * Class to store depencies between instancies
  *
  * @author Noskov Alexey
  */
-class PinConnection extends SixFreedomConnection{
-    
-    
+class InstanceHashTable extends TwoDimensionalTable {
+
 }

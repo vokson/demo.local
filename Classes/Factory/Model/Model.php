@@ -14,6 +14,7 @@ class Model {
     private static $nodes = array(); // Collection of nodes in model
     private static $members = array(); // Collection of rod members in model
     public static $hashTable; // Table of connection btw instances;
+    public static $restraintTable; // Table of restraints;
 
     /*
      * Adв Instance
@@ -79,14 +80,27 @@ class Model {
     /*
      * Get Hash Table
      * 
-     * @return \Classes\Factory\Model\InstanceHashTable Pointer to Hash Table
+     * @return \Classes\Factory\Model\Table\InstanceHashTable Pointer to Hash Table
      */
     public static function &getHashTable() {
         if (!isset(self::$hashTable)) {
-            self::$hashTable = new InstanceHashTable();
+            self::$hashTable = new Table\InstanceHashTable();
         }
         
         return self::$hashTable;
+    }
+    
+    /*
+     * Get Restraint Table
+     * 
+     * @return \Classes\Factory\Model\Table\RestraintTable Pointer to Restraint Table
+     */
+    public static function &getRestraintTable() {
+        if (!isset(self::$restraintTable)) {
+            self::$restraintTable = new Table\RestraintTable();
+        }
+        
+        return self::$restraintTable;
     }
     
     /*
@@ -107,6 +121,10 @@ class Model {
         
         echo "+++ HASH TABLE +++<br/>";
         self::getHashTable()->servicePrint();
+        echo "<br/>";
+        
+        echo "+++ RESTRAINT TABLE +++<br/>";
+        self::getRestraintTable()->servicePrint();
         echo "<br/>";
     }
 }

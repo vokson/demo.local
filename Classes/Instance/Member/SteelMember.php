@@ -30,7 +30,7 @@ class SteelMember extends \Classes\Instance\Instance {
         'betaAngle' => '\Classes\Value\IntValue',
         'sectionType' => '\Classes\Value\StringValue',
         'sectionName' => '\Classes\Value\StringValue',
-        'isDivided' => '\Classes\Value\IntValue'
+        'isDivided' => '\Classes\Value\BoolValue'
     );
     
     public function __construct() {

@@ -30,7 +30,12 @@ class DivideMember {
         if (!isset($nodes[$nodeUin]) || !isset($members[$memberUin])) {
             return FALSE;
         }
-
+        
+        // Check if member is divided
+         if ($members[$memberUin]->getProperty('isDivided')->get() == FALSE) {
+            return FALSE;
+        }
+        
         // Get 2nd connection from oldMember
         $hash = $hashTable->getConnection($memberUin);
 
@@ -94,7 +99,11 @@ class DivideMember {
         if (!isset($members[$memberUin])) {
             return FALSE;
         }
-
+        
+        // Check if member is divided
+         if ($members[$memberUin]->getProperty('isDivided')->get() == FALSE) {
+            return FALSE;
+        }
 
         $isDivided = TRUE;
         foreach ($nodes as $key => $node) {

@@ -8,6 +8,14 @@ namespace Classes\Factory\Export;
  * @author Noskov Alexey
  */
 class Scad21ExportFactory extends ExportFactory {
+    
+    // Array for text lines
+    private static $txt = array();
+    // Collections
+    private static $nodes;
+    private static $members;
+    private static $restraints;
+    
     /*
      * Upload array of instance from file
      * 
@@ -15,17 +23,36 @@ class Scad21ExportFactory extends ExportFactory {
      * @return void
      */
     public static function export($path) {
-        $txt = array();
-        // START
-        $txt[] =  '#include "stdafx.h"';
-        $txt[] =  '#include "Model.h"';
-        $txt[] =  'Model::Model() {';
+        self::$nodes = \Classes\Factory\Model\Model::getNodes();
+        self::$members = \Classes\Factory\Model\Model::getMembers();
+        self::$restraints = \Classes\Factory\Model\Model::getRestraintTable()->getTable();
         
-        $txt[] = "// +++ NODES +++";
-        $nodes = \Classes\Factory\Model\Model::getNodes();
-        foreach ($nodes as $uin => $object) {
-            // this->nodes.push_back(Node(1,"Node 1",0,3,0));
-            
+        
+        // START
+        self::$txt[] =  '#include "stdafx.h"';
+        self::$txt[] =  '#include "Model.h"';
+        self::$txt[] =  'Model::Model() {';
+        
+       //EXPORT
+       self::nodesExport();
+       self::memberExport();
+       self::restraintExport();
+        
+        self::$txt[] =  '};';
+        // FINISH
+        file_put_contents($path, implode("\r\n", self::$txt));
+    }
+    
+    /*
+     * Export of nodes
+     * 
+     * @return void
+     */
+    private function nodesExport() {
+        self::$txt[] = "// +++ NODES +++";
+     
+        foreach (self::$nodes as $object) {
+         
             $id = $object->getProperty('id')->get();
             $name = '"'.$object->getProperty('name')->get().'"';
             
@@ -33,12 +60,40 @@ class Scad21ExportFactory extends ExportFactory {
             $y = $object->getProperty('y')->get();
             $z = $object->getProperty('z')->get();
             
-            $txt[] = "this->nodes.push_back(Node($id, $name, $x, $y, $z));";
+            self::$txt[] = "this->nodes.push_back(Node($id, $name, $x, $y, $z));";
         }
-        
-        $txt[] = "// +++ MEMBERS +++";
-        $members = \Classes\Factory\Model\Model::getMembers();
-        foreach ($members as $uin => $object) {
+    }
+    
+    /*
+     * Export of restraints
+     * 
+     * @return void
+     */
+    private function restraintExport() {
+        self::$txt[] = "// +++ RESTRAINTS +++";
+        foreach (self::$restraints as $nodeUin => $connection) {
+            // this->members.push_back(Restraint(1, 32));
+            
+            $id = self::$nodes[$nodeUin]->getProperty('id')->get();
+            
+            // Get RESTRAINT
+            $restraint = 0;
+            if ($connection instanceof \Classes\Factory\Connection\RestraintConnection) {
+                $restraint = $connection->get();
+            }
+            
+            self::$txt[] = "this->restraints.push_back(Restraint($id, $restraint));";
+        }
+    }
+    
+    /*
+     * Export of members
+     * 
+     * @return void
+     */
+    private function memberExport() {
+        self::$txt[] = "// +++ MEMBERS +++";
+        foreach (self::$members as $object) {
             // this->members.push_back(Member(1, "1st element", 1, 2, 32, 63, 90, "STZ RUSSIAN p_wide_h 18 TMP 1.2e-005"));
             
             $id = $object->getProperty('id')->get();
@@ -50,8 +105,8 @@ class Scad21ExportFactory extends ExportFactory {
             $objectConnections = \Classes\Factory\Model\Model::getHashTable()->getConnection($object->getUin());
             $nodeUins = array_keys($objectConnections);
             
-            $node1 = $nodes[$nodeUins[0]]->getProperty('id')->get();
-            $node2 = $nodes[$nodeUins[1]]->getProperty('id')->get();
+            $node1 = self::$nodes[$nodeUins[0]]->getProperty('id')->get();
+            $node2 = self::$nodes[$nodeUins[1]]->getProperty('id')->get();
             
             // Get PINS
             $pins = array_values($objectConnections);
@@ -63,11 +118,7 @@ class Scad21ExportFactory extends ExportFactory {
                 $pin2 = $pins[1]->get();
             }
             
-            $txt[] = "this->members.push_back(Member($id, $name, $node1, $node2, $pin1, $pin2, $betaAngle, $section));";
+            self::$txt[] = "this->members.push_back(Member($id, $name, $node1, $node2, $pin1, $pin2, $betaAngle, $section));";
         }
-        
-        $txt[] =  '};';
-        // FINISH
-        file_put_contents($path, implode("\r\n", $txt));
     }
 }
