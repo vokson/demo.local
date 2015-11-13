@@ -13,11 +13,12 @@ class Model {
     
     private static $nodes = array(); // Collection of nodes in model
     private static $members = array(); // Collection of rod members in model
-    public static $hashTable; // Table of connection btw instances;
-    public static $restraintTable; // Table of restraints;
+    private static $hashTable; // Table of connection btw instances;
+    private static $restraintTable; // Table of restraints;
+    private static $listboxActionCollection; //Collection of listboxes
 
     /*
-     * Adв Instance
+     * Add Instance
      * 
      * @param \Classes\Instance\Node\Node $object Object to be added to Model
      * @return void
@@ -101,6 +102,19 @@ class Model {
         }
         
         return self::$restraintTable;
+    }
+    
+    /*
+     * Get Listbox Collection
+     * 
+     * @return \Classes\Listbox\Collection\ListboxActionCollection Pointer to colelciton
+     */
+    public static function &getListBoxActionCollection() {
+        if (!isset(self::$listboxActionCollection)) {
+            self::$listboxActionCollection = new \Classes\Listbox\Collection\ListboxActionCollection();
+        }
+        
+        return self::$listboxActionCollection;
     }
     
     /*
