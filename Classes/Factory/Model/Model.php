@@ -15,7 +15,7 @@ class Model {
     private static $members = array(); // Collection of rod members in model
     private static $hashTable; // Table of connection btw instances;
     private static $restraintTable; // Table of restraints;
-    private static $listboxActionCollection; //Collection of listboxes
+    private static $memberActionCollection; //Collection of listboxes
 
     /*
      * Add Instance
@@ -54,6 +54,11 @@ class Model {
         // MEMBER
         if (isset(self::$members[$uin])) {
             unset(self::$members[$uin]);
+            
+            // ADD ACTION TO COLLECTION
+            $this->getMemberActionCollection()->addAction(
+                    new \Classes\Listbox\Action\DeleteListboxAction($uin));
+            
             return TRUE;
         }
         
@@ -109,12 +114,12 @@ class Model {
      * 
      * @return \Classes\Listbox\Collection\ListboxActionCollection Pointer to colelciton
      */
-    public static function &getListBoxActionCollection() {
-        if (!isset(self::$listboxActionCollection)) {
-            self::$listboxActionCollection = new \Classes\Listbox\Collection\ListboxActionCollection();
+    public static function &getMemberActionCollection() {
+        if (!isset(self::$memberActionCollection)) {
+            self::$memberActionCollection = new \Classes\Listbox\Collection\ListboxActionCollection();
         }
         
-        return self::$listboxActionCollection;
+        return self::$memberActionCollection;
     }
     
     /*
@@ -139,6 +144,10 @@ class Model {
         
         echo "+++ RESTRAINT TABLE +++<br/>";
         self::getRestraintTable()->servicePrint();
+        echo "<br/>";
+        
+        echo "+++ MEMBER ACTION COLLECTION +++<br/>";
+        self::getMemberActionCollection()->servicePrint();
         echo "<br/>";
     }
 }

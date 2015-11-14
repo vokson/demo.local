@@ -12,7 +12,7 @@ class ListboxActionCollection {
     private $actionArray = array(); // Array of Listbox Actions
     private $lastActionIndexArray = array(); // Array of indexes of last applied actions
     private $currentActionIndex = -1; //Last index of Action in actionArray
-    const maxCountOfActionArray = 3;
+    const maxCountOfActionArray = 30;
     
     /*
      * Add Listbox Action
@@ -110,10 +110,10 @@ class ListboxActionCollection {
 
             $startIndex = array_keys($this->actionArray)[0];
             $stopIndex = min($this->lastActionIndexArray);
-            echo "START = $startIndex; STOP = $stopIndex<br/>";
+//            echo "START = $startIndex; STOP = $stopIndex<br/>";
             
             for($i = $startIndex; $i <= $stopIndex; $i++) {
-                echo "I = $i<br/>";
+//                echo "I = $i<br/>";
                 unset($this->actionArray[$i]);
             }
         }

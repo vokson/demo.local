@@ -13,11 +13,13 @@ namespace Classes\Listbox\Action;
  *
  * @author Noskov Alexey
  */
-class DeleteListboxAction extends ListboxAction {
-   
-   // Constructor
-   public function __construct($element) {
+class ReplaceListboxAction extends ListboxAction {
+    private $arrayOfNewElements;
+
+    // Constructor
+   public function __construct($element, $arrayOfNewElements) {
        parent::__construct($element);
+       $this->arrayOfNewElements = $arrayOfNewElements;
    }
    
    /*
@@ -29,6 +31,11 @@ class DeleteListboxAction extends ListboxAction {
     */
    public function apply(&$listbox) {
        $listbox->remove($this->applyToElement);
+       
+       foreach ($this->arrayOfNewElements as $element) {
+           $listbox->add($element);
+       }
+       
        return TRUE;
    }
    
@@ -36,7 +43,7 @@ class DeleteListboxAction extends ListboxAction {
     * PRINT
     */
    public function servicePrint() {
-       echo "DELETE ".$this->applyToElement;
+       echo "REPLACE ".$this->applyToElement. " WITH ". implode(",", $this->arrayOfNewElements);
    }
    
 }

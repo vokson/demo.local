@@ -66,6 +66,12 @@ class DivideMember {
         $hashTable->setConnection($newMember->getUin(), $nodeUin, $zeroPin);
         // Set 2nd connection to newMember
         $hashTable->setConnection($newMember->getUin(), $uin2, $con2);
+        
+        // Add information about operation in ListBoxCollection
+        $actionCollection = \Classes\Factory\Model\Model::getMemberActionCollection();
+        $actionCollection->addAction(new \Classes\Listbox\Action\ReplaceListboxAction(
+                $memberUin, array($memberUin, $newMember->getUin()))
+        );
 
         return $newMember->getUin();
     }

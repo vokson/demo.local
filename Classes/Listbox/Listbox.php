@@ -17,15 +17,23 @@ class Listbox {
 
     private $array = array(); // Array of elements
     private $uin = NULL; //UIN
+    private $listboxActionCollection; //Link to collection
 
     /*
      * Construct new object of class
      * 
+     * @param \Classes\Listbox\Collection\ListboxActionCollection $listboxActionCollection
+     * 
      * @return void
      */
 
-    function __construct() {
+    function __construct(&$listboxActionCollection) {
         $this->uin = uniqid('', TRUE);
+        $this->listboxActionCollection = $listboxActionCollection;
+        
+        // Register listbox
+        $this->listboxActionCollection->registerListbox($this);
+        
     }
 
     /*
@@ -107,7 +115,7 @@ class Listbox {
      */
 
     private function update() {
-       return \Classes\Factory\Model\Model::getListBoxActionCollection()->updateListbox($this);
+       return $this->listboxActionCollection->updateListbox($this);
     }
 
     /*
@@ -123,7 +131,7 @@ class Listbox {
             return FALSE;
         }
 
-        return $action->apply($this->array);
+        return $action->apply($this);
     }
 
     /*
