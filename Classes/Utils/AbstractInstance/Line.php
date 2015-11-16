@@ -21,4 +21,22 @@ class Line {
         $this->point1 = $point1;
         $this->point2 = $point2;
     }
+    
+    /*
+     * Get length
+     * 
+     * @return double
+     */
+    public function length() {
+        \Classes\Utils\Math\Points::twoPointsDistance($this->point1, $this->point2);
+    }
+    
+    /* 
+     * Reverse line
+     */
+    public function reverse() {
+        $temp = $this->point1;
+        $this->point1 = $this->point2;
+        $this->point2 = $temp;
+    }
 }

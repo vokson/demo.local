@@ -40,6 +40,7 @@ class DivideMemberTest extends \PHPUnit_Framework_TestCase
         
         // MEMBER
         $member1 = new \Classes\Instance\Member\Member();
+        $member1->setProperty('isDivided', new \Classes\Value\IntValue(1));
         $this->member1Uin = $member1->getUin();
         
         // ADD TO MODEL
@@ -56,14 +57,6 @@ class DivideMemberTest extends \PHPUnit_Framework_TestCase
         $hashTable = \Classes\Factory\Model\Model::getHashTable();
         $hashTable->setConnection($this->node1Uin, $this->member1Uin, $pin1);
         $hashTable->setConnection($this->node2Uin, $this->member1Uin, $pin2);
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
     }
 
     /**

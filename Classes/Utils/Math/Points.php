@@ -25,15 +25,30 @@ class Points {
      */
     public static function isPointSame($point1, $point2) {
         
-        if (sqrt(pow($point1->x-$point2->x, 2)
-                + pow($point1->y-$point2->y, 2)
-                + pow($point1->z-$point2->z, 2))
+        if (Points::twoPointsDistance($point1, $point2)
                 <= \Classes\Factory\Model\Model::coordinateTolerance) {
             return TRUE;
         } else {
             return FALSE;
         }
     }
+    
+    /*
+     * Get distance between two points
+     
+     * @param Classes\Utils\AbstractInstance\Point $point1
+     * @param Classes\Utils\AbstractInstance\Point $point2
+     * 
+     * @return bool
+     */
+    
+     public static function twoPointsDistance($point1, $point2) {
+         return sqrt(
+                  pow($point1->x-$point2->x, 2)
+                + pow($point1->y-$point2->y, 2)
+                + pow($point1->z-$point2->z, 2)
+         );
+     }
     
     /*
      * Check if point is laying on line
