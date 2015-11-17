@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Classes\Utils;
+namespace Classes\Utils\Section;
 
 /**
  * Class make string naem of section type
