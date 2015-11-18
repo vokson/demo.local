@@ -22,7 +22,7 @@ class ConstraintAddition {
         $resTable = \Classes\Factory\Model\Model::getRestraintTable();
         
         // RESTRAINT
-        $restraint = new \Classes\Factory\Connection\RestraintConnection($object->getProperty('fix')->get());
+        $restraint = new \Classes\Factory\Connection\SixFreedomConnection\RestraintConnection($object->getProperty('fix')->get());
         
         // RESTRAINT POINT
         $resPoint = new \Classes\Utils\AbstractInstance\Point(

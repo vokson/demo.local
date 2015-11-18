@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Classes\Factory\Connection;
+namespace Classes\Factory\Connection\SixFreedomConnection;
 
 /**
  * Description of PinConnection
  *
  * @author Noskov Alexey
  */
-class SixFreedomConnection extends Connection{
+class SixFreedomConnection extends \Classes\Factory\Connection\Connection{
     
     /*
      * Constructor from STRING with format "010010"

@@ -34,8 +34,17 @@ try {
     $memberLoadArray = $uploadFactory->upload('./Source/Excel/Loads_01.xlsx',
             new \Classes\Instance\Load\Member\CommonMemberLoad);
     
+    
     foreach ($memberLoadArray as $object) {
-        Classes\Factory\Model\Addition\MemberLoadAddition::add($object);
+        $notFoundObjects = NULL;
+        $isFound = Classes\Factory\Model\Addition\MemberLoadAddition::add($object, $notFoundObjects);
+        
+        $name = $object->getProperty('name')->get();
+        if (!$isFound) {
+            echo "LOAD $name IS NOT FOUND<br/>";
+        } else {
+            echo "LOAD $name IS FOUND<br/>";
+        }
     }
     
     // NUMERATION

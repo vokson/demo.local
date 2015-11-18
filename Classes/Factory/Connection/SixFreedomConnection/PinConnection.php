@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Classes\Factory\Connection;
+namespace Classes\Factory\Connection\SixFreedomConnection;
 
 /**
  * Description of PinConnection
  *
  * @author Noskov Alexey
  */
-class RestraintConnection extends SixFreedomConnection{
+class PinConnection extends SixFreedomConnection{
     
     
 }

@@ -43,7 +43,7 @@ class DivideMember {
         $con2 = array_values($hash)[1];
 
         // Create zero Pin connection
-        $zeroPin = new \Classes\Factory\Connection\PinConnection;
+        $zeroPin = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection;
 
         // Remove 2nd connection from oldMember
         $hashTable->removeConnection($memberUin, $uin2);

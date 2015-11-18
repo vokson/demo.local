@@ -51,8 +51,8 @@ class SteelMemberAddition {
          \Classes\Factory\Model\Model::addInstance($member);
                  
         // PINS
-        $pin1 = new \Classes\Factory\Connection\PinConnection($object->getProperty('pin1')->get());
-        $pin2 = new \Classes\Factory\Connection\PinConnection($object->getProperty('pin2')->get());
+        $pin1 = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection($object->getProperty('pin1')->get());
+        $pin2 = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection($object->getProperty('pin2')->get());
         
         // ADD TO HASH TABLE
         $hashTable = \Classes\Factory\Model\Model::getHashTable();

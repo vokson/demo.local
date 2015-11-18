@@ -25,8 +25,9 @@ class Points {
      */
     public static function isPointSame($point1, $point2) {
         
-        if (Points::twoPointsDistance($point1, $point2)
-                <= \Classes\Factory\Model\Model::coordinateTolerance) {
+        if ( (abs($point1->x - $point2->x) <= \Classes\Factory\Model\Model::coordinateTolerance) && 
+             (abs($point1->y - $point2->y) <= \Classes\Factory\Model\Model::coordinateTolerance) &&
+             (abs($point1->z - $point2->z) <= \Classes\Factory\Model\Model::coordinateTolerance)) {
             return TRUE;
         } else {
             return FALSE;

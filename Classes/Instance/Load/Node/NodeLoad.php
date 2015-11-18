@@ -6,30 +6,22 @@
  * and open the template in the editor.
  */
 
-namespace Classes\Instance\Load\Member;
+namespace Classes\Instance\Load\Node;
 
 /**
- * Class for Member Instance
+ * Class for Node Load
  *
  * @author Noskov Alexey
  */
-class CommonMemberLoad extends \Classes\Instance\Load\Load {
+class NodeLoad extends \Classes\Instance\Load\Load {
    /*
      * $param string[] valid property names
      */
     protected $validPropertyNames = array(
         'loadCase' => '\Classes\Value\IntValue',
         'name' => '\Classes\Value\StringValue',
-        'type' => '\Classes\Value\StringValue',
-        'direction' => '\Classes\Value\StringValue',
-        'x1' => '\Classes\Value\FloatValue',
-        'y1' => '\Classes\Value\FloatValue',
-        'z1' => '\Classes\Value\FloatValue',
-        'x2' => '\Classes\Value\FloatValue',
-        'y2' => '\Classes\Value\FloatValue',
-        'z2' => '\Classes\Value\FloatValue',
-        'value1' => '\Classes\Value\FloatValue',
-        'value2' => '\Classes\Value\FloatValue'
+        'direction' => '\Classes\Value\IntValue',
+        'value' => '\Classes\Value\FloatValue'
     );
     
     public function __construct() {
@@ -41,6 +33,13 @@ class CommonMemberLoad extends \Classes\Instance\Load\Load {
      * PRINT
      */
     public function servicePrint() {
-        // TODO
+        $uin = $this->getUin();
+        
+        $loadCase = $this->getProperty('loadCase')->get();
+        $name = $this->getProperty('name')->get();
+        $direction = $this->getProperty('direction')->get();
+        $value = $this->getProperty('value')->get();
+        
+        echo $uin . " => $loadCase NC |$direction| $value *$name*<br/>";
     }
 }

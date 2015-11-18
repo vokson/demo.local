@@ -13,8 +13,10 @@ class Model {
     
     private static $nodes = array(); // Collection of nodes in model
     private static $members = array(); // Collection of rod members in model
+    private static $loads = array(); // Collection of loads in model
     private static $hashTable; // Table of connection btw instances;
     private static $restraintTable; // Table of restraints;
+    private static $loadTable; // Table of loads;
     private static $memberActionCollection; //Collection of listboxes
 
     /*
@@ -34,6 +36,10 @@ class Model {
         // MEMBER
         if ($object instanceof \Classes\Instance\Member\Member) {
             self::$members[$uin] = $object;
+        }
+         // LOAD
+        if ($object instanceof \Classes\Instance\Load\Load) {
+            self::$loads[$uin] = $object;
         }
     }
     
@@ -97,6 +103,19 @@ class Model {
     }
     
     /*
+     * Get Load Table
+     * 
+     * @return \Classes\Factory\Model\Table\LoadTable Pointer to Load Table
+     */
+    public static function &getLoadTable() {
+        if (!isset(self::$loadTable)) {
+            self::$loadTable = new Table\LoadTable();
+        }
+        
+        return self::$loadTable;
+    }
+    
+    /*
      * Get Restraint Table
      * 
      * @return \Classes\Factory\Model\Table\RestraintTable Pointer to Restraint Table
@@ -133,13 +152,23 @@ class Model {
         echo "<br/>";
         
         echo "+++ MEMBERS +++<br/>";
-                foreach (self::$members as $member) {
+        foreach (self::$members as $member) {
             $member->servicePrint();
+        }
+        echo "<br/>";
+        
+        echo "+++ LOADS +++<br/>";
+        foreach (self::$loads as $load) {
+            $load->servicePrint();
         }
         echo "<br/>";
         
         echo "+++ HASH TABLE +++<br/>";
         self::getHashTable()->servicePrint();
+        echo "<br/>";
+        
+        echo "+++ LOAD TABLE +++<br/>";
+        self::getLoadTable()->servicePrint();
         echo "<br/>";
         
         echo "+++ RESTRAINT TABLE +++<br/>";
