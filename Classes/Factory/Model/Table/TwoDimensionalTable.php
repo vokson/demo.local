@@ -14,7 +14,7 @@ namespace Classes\Factory\Model\Table;
  * @author Noskov Alexey
  */
 class TwoDimensionalTable {
-    private $table = array(); // array to store hash table
+    protected $table = array(); // array to store hash table
     
     /*
      * Add connection to Hash Table

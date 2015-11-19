@@ -15,7 +15,7 @@ namespace Classes\Factory\Model\Table;
  */
 class OneDimensionalTable {
 
-    private $table = array(); // array to store table
+    protected $table = array(); // array to store table
 
     /*
      * Get Table

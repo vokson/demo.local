@@ -14,10 +14,12 @@ class Model {
     private static $nodes = array(); // Collection of nodes in model
     private static $members = array(); // Collection of rod members in model
     private static $loads = array(); // Collection of loads in model
+    private static $loadCases = array(); // Collection of load cases
     private static $hashTable; // Table of connection btw instances;
     private static $restraintTable; // Table of restraints;
     private static $loadTable; // Table of loads;
     private static $memberActionCollection; //Collection of listboxes
+    private static $massMatrixTable; // Table of coefficients for mass matrix
 
     /*
      * Add Instance
@@ -40,6 +42,10 @@ class Model {
          // LOAD
         if ($object instanceof \Classes\Instance\Load\Load) {
             self::$loads[$uin] = $object;
+        }
+        // LOAD CASE
+        if ($object instanceof \Classes\Instance\LoadCase\LoadCase) {
+            self::$loadCases[$uin] = $object;
         }
     }
     
@@ -67,6 +73,17 @@ class Model {
             
             return TRUE;
         }
+        // LOAD
+        if (isset(self::$loads[$uin])) {
+            unset(self::$loads[$uin]);
+            return TRUE;
+        }
+        
+        // LOAD CASE
+        if (isset(self::$loadCases[$uin])) {
+            unset(self::$loadCases[$uin]);
+            return TRUE;
+        }
         
         return FALSE;
     }
@@ -87,6 +104,15 @@ class Model {
      */
     public static function &getMembers() {
         return self::$members;
+    }
+    
+    /*
+     * Get loads collection
+     * 
+     * @return \Classes\Instance\LoadCase\LoadCase[] Array of load cases
+     */
+    public static function &getLoadCases() {
+        return self::$loadCases;
     }
     
     /*
@@ -114,6 +140,20 @@ class Model {
         
         return self::$loadTable;
     }
+    
+    /*
+     * Get Load Table
+     * 
+     * @return \Classes\Factory\Model\Table\MassMatrixTable Pointer to Table
+     */
+    public static function &getMassMatrixTable() {
+        if (!isset(self::$massMatrixTable)) {
+            self::$massMatrixTable = new Table\MassMatrixTable();
+        }
+        
+        return self::$massMatrixTable;
+    }
+    
     
     /*
      * Get Restraint Table
@@ -146,20 +186,26 @@ class Model {
      */
     public static function servicePrint() {
         echo "+++ NODES +++<br/>";
-        foreach (self::$nodes as $node) {
-            $node->servicePrint();
+        foreach (self::$nodes as $object) {
+            $object->servicePrint();
         }
         echo "<br/>";
         
         echo "+++ MEMBERS +++<br/>";
-        foreach (self::$members as $member) {
-            $member->servicePrint();
+        foreach (self::$members as $object) {
+            $object->servicePrint();
+        }
+        echo "<br/>";
+        
+        echo "+++ LOAD CASES +++<br/>";
+        foreach (self::$loadCases as $object) {
+            $object->servicePrint();
         }
         echo "<br/>";
         
         echo "+++ LOADS +++<br/>";
-        foreach (self::$loads as $load) {
-            $load->servicePrint();
+        foreach (self::$loads as $object) {
+            $object->servicePrint();
         }
         echo "<br/>";
         
@@ -169,6 +215,10 @@ class Model {
         
         echo "+++ LOAD TABLE +++<br/>";
         self::getLoadTable()->servicePrint();
+        echo "<br/>";
+        
+         echo "+++ MASS MATRIX TABLE +++<br/>";
+        self::getMassMatrixTable()->servicePrint();
         echo "<br/>";
         
         echo "+++ RESTRAINT TABLE +++<br/>";

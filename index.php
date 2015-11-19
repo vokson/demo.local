@@ -30,6 +30,14 @@ try {
         Classes\Factory\Model\Addition\ConstraintAddition::add($object);
     }
     
+    // UPLOAD LOAD CASES
+    $loadCaseArray = $uploadFactory->upload('./Source/Excel/Load_Cases_01.xlsx',
+            new \Classes\Instance\LoadCase\LoadCase);
+    
+    foreach ($loadCaseArray as $object) {
+        Classes\Factory\Model\Addition\LoadCaseAddition::add($object);
+    }
+    
     // UPLOAD LOADS
     $memberLoadArray = $uploadFactory->upload('./Source/Excel/Loads_01.xlsx',
             new \Classes\Instance\Load\Member\CommonMemberLoad);
