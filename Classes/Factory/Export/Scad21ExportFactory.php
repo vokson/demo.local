@@ -15,6 +15,9 @@ class Scad21ExportFactory extends ExportFactory {
     private static $nodes;
     private static $members;
     private static $restraints;
+    private static $loadCases;
+    private static $massMatrixTable;
+    
     
     /*
      * Upload array of instance from file
@@ -26,6 +29,8 @@ class Scad21ExportFactory extends ExportFactory {
         self::$nodes = \Classes\Factory\Model\Model::getNodes();
         self::$members = \Classes\Factory\Model\Model::getMembers();
         self::$restraints = \Classes\Factory\Model\Model::getRestraintTable()->getTable();
+        self::$loadCases = \Classes\Factory\Model\Model::getLoadCases();
+        self::$massMatrixTable = \Classes\Factory\Model\Model::getMassMatrixTable();
         
         
         // START
@@ -37,6 +42,7 @@ class Scad21ExportFactory extends ExportFactory {
        self::nodesExport();
        self::memberExport();
        self::restraintExport();
+       self::loadCaseExport();
         
         self::$txt[] =  '};';
         // FINISH
@@ -83,6 +89,47 @@ class Scad21ExportFactory extends ExportFactory {
             }
             
             self::$txt[] = "this->restraints.push_back(Restraint($id, $restraint));";
+        }
+    }
+    
+    /*
+     * Export of load cases
+     * 
+     * @return void
+     */
+    private function loadCaseExport() {
+        self::$txt[] = "// +++ LOAD CASES +++";
+        self::$txt[] = "std::vector <double> massMatrixVector;";
+        
+        foreach (self::$loadCases as $uin => $case) {
+            
+            $id = $case->getProperty('id')->get();
+            $name = $case->getProperty('name')->get();
+            $description = $case->getProperty('description')->get();
+            
+            // Get Masses
+            $connection = self::$massMatrixTable->getConnection($uin);
+            if (is_null($connection)) {
+                self::$txt[] = "this->loadCases.push_back(LoadCase($id, \"$name\", \"$description\" ));";
+            } else {
+                // Clear vector
+                self::$txt[] = "massMatrixVector.clear();";
+                
+                // Find max id in array
+                $massArray = $connection->get();
+                $maxID = max(array_keys($massArray));
+                // Fill vector with coefficients
+                for ($i=0; $i <= $maxID; $i++) {
+                    
+                    $coefficient = 0;
+                    if (isset($massArray[$i])) {
+                        $coefficient = $massArray[$i];
+                    }
+                    
+                    self::$txt[] = "massMatrixVector.push_back($coefficient);";
+                }
+                self::$txt[] = "this->loadCases.push_back(LoadCase($id,\"$name\", \"$description\", massMatrixVector));";
+            }
         }
     }
     

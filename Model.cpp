@@ -27,4 +27,13 @@ this->members.push_back(Member(10, "B1", 8, 6, 0, 0, 0, "STZ RUSSIAN p_norm_b 14
 this->restraints.push_back(Restraint(1, 0));
 this->restraints.push_back(Restraint(3, 0));
 this->restraints.push_back(Restraint(5, 0));
+// +++ LOAD CASES +++
+std::vector <double> massMatrixVector;
+this->loadCases.push_back(LoadCase(1, "DL", "Type=0  Mode=1  LongTime=1  ReliabilityFactor=1.05" ));
+this->loadCases.push_back(LoadCase(2, "LL", "Type=0  Mode=1  LongTime=1  ReliabilityFactor=1.05" ));
+massMatrixVector.clear();
+massMatrixVector.push_back(0);
+massMatrixVector.push_back(1.2);
+massMatrixVector.push_back(1.5);
+this->loadCases.push_back(LoadCase(3,"Wind", "Type=2  ReliabilityFactor=1.1  21 5 1  1 3 0 0 0 5 18 1 0 0.3 1", massMatrixVector));
 };
