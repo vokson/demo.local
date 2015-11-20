@@ -107,12 +107,21 @@ class Model {
     }
     
     /*
-     * Get loads collection
+     * Get load cases collection
      * 
      * @return \Classes\Instance\LoadCase\LoadCase[] Array of load cases
      */
     public static function &getLoadCases() {
         return self::$loadCases;
+    }
+    
+    /*
+     * Get loads collection
+     * 
+     * @return \Classes\Instance\Loade\Load[] Array of loads
+     */
+    public static function &getLoads() {
+        return self::$loads;
     }
     
     /*

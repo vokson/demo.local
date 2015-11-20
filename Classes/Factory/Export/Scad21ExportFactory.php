@@ -16,7 +16,9 @@ class Scad21ExportFactory extends ExportFactory {
     private static $members;
     private static $restraints;
     private static $loadCases;
+    private static $loads;
     private static $massMatrixTable;
+    private static $loadTable;
     
     
     /*
@@ -30,7 +32,9 @@ class Scad21ExportFactory extends ExportFactory {
         self::$members = \Classes\Factory\Model\Model::getMembers();
         self::$restraints = \Classes\Factory\Model\Model::getRestraintTable()->getTable();
         self::$loadCases = \Classes\Factory\Model\Model::getLoadCases();
+        self::$loads = \Classes\Factory\Model\Model::getLoads();
         self::$massMatrixTable = \Classes\Factory\Model\Model::getMassMatrixTable();
+        self::$loadTable = \Classes\Factory\Model\Model::getLoadTable();
         
         
         // START
@@ -43,6 +47,7 @@ class Scad21ExportFactory extends ExportFactory {
        self::memberExport();
        self::restraintExport();
        self::loadCaseExport();
+       self::loadExport();
         
         self::$txt[] =  '};';
         // FINISH
@@ -130,6 +135,86 @@ class Scad21ExportFactory extends ExportFactory {
                 }
                 self::$txt[] = "this->loadCases.push_back(LoadCase($id,\"$name\", \"$description\", massMatrixVector));";
             }
+        }
+    }
+    
+    /*
+     * Export of loads
+     * 
+     * @return void
+     */
+    private function loadExport() {
+        self::$txt[] = "// +++ LOADS +++";
+        self::$txt[] = "std::vector <double> loadVector;";
+        
+        foreach (self::$loads as $loadUin => $load) {
+            
+            // Clear vector
+            self::$txt[] = "loadVector.clear();";
+            
+            $loadCase = $load->getProperty('loadCase')->get();
+            $loadDirection = $load->getProperty('direction')->get();
+            
+            $connectArray = self::$loadTable->getConnection($loadUin);
+            $instanceTargetUin = array_keys($connectArray)[0];
+            $coordinateSystem = array_values($connectArray)[0];
+            
+            // NODE LOAD
+            if ($load instanceof \Classes\Instance\Load\Node\NodeLoad) {
+                
+                $id = self::$nodes[$instanceTargetUin]->getProperty('id')->get();
+                $loadType = 0;
+                $value = $load->getProperty('value')->get();
+                
+                //Fill vector with load data
+                self::$txt[] = "loadVector.push_back($value);";
+            }
+            
+            // CONCENTRATED MEMBER LOAD
+            if ($load instanceof \Classes\Instance\Load\Member\ConcenratedMemberLoad) {
+                
+                $id = self::$members[$instanceTargetUin]->getProperty('id')->get();
+                
+                if ($coordinateSystem instanceof \Classes\Factory\Connection\LoadConnection\GlobalCoordinateSystem) {
+                    $loadType = 15;
+                }
+                if ($coordinateSystem instanceof \Classes\Factory\Connection\LoadConnection\LocalCoordinateSystem) {
+                    $loadType = 5;
+                }
+                
+                $value = $load->getProperty('value')->get();
+                $position = $load->getProperty('position')->get();
+                
+                //Fill vector with load data
+                self::$txt[] = "loadVector.push_back($value);";
+                self::$txt[] = "loadVector.push_back($position);";
+            }
+            
+            // DISTRIBUTED MEMBER LOAD
+            if ($load instanceof \Classes\Instance\Load\Member\DistributedMemberLoad) {
+                
+                $id = self::$members[$instanceTargetUin]->getProperty('id')->get();
+                
+                if ($coordinateSystem instanceof \Classes\Factory\Connection\LoadConnection\GlobalCoordinateSystem) {
+                    $loadType = 17;
+                }
+                if ($coordinateSystem instanceof \Classes\Factory\Connection\LoadConnection\LocalCoordinateSystem) {
+                    $loadType = 7;
+                }
+                
+                $value1 = $load->getProperty('value1')->get();
+                $value2 = $load->getProperty('value2')->get();
+                $position1 = $load->getProperty('position1')->get();
+                $position2 = $load->getProperty('position2')->get();
+                
+                //Fill vector with load data
+                self::$txt[] = "loadVector.push_back($value1);";
+                self::$txt[] = "loadVector.push_back($position1);";
+                self::$txt[] = "loadVector.push_back($value2);";
+                self::$txt[] = "loadVector.push_back($position2);";
+            }
+            
+            self::$txt[] = "this->loads.push_back(Load($loadCase, $id, $loadType, $loadDirection, loadVector));";
         }
     }
     
