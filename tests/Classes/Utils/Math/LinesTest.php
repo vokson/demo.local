@@ -299,4 +299,51 @@ class LinesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Constant::isNumbersEqual($overlap2[0], 5*sqrt(3)), TRUE);
         $this->assertEquals(Constant::isNumbersEqual($overlap2[1], 7*sqrt(3)), TRUE);
     }
+    
+    /**
+     * @covers Classes\Utils\Math\Lines::getPointOnLineWithOffset
+     */
+    public function testGetPointOnLineWithOffset_1() {
+        $p1 = new \Classes\Utils\AbstractInstance\Point(3,3,3);
+        $p2 = new \Classes\Utils\AbstractInstance\Point(5,5,5);
+        $line = new \Classes\Utils\AbstractInstance\Line($p1, $p2);
+        
+        $offset = -0.1;
+        $this->assertEquals(Lines::getPointOnLineWithOffset($line, $offset), FALSE);
+        
+        $offset = 3.5;
+        $this->assertEquals(Lines::getPointOnLineWithOffset($line, $offset), FALSE);
+    }
+    
+    /**
+     * @covers Classes\Utils\Math\Lines::getPointOnLineWithOffset
+     */
+    public function testGetPointOnLineWithOffset_2() {
+        $p1 = new \Classes\Utils\AbstractInstance\Point(1,0,0);
+        $p2 = new \Classes\Utils\AbstractInstance\Point(5,0,0);
+        $line = new \Classes\Utils\AbstractInstance\Line($p1, $p2);
+        
+        $offset = 1;
+        $point = Lines::getPointOnLineWithOffset($line, $offset);
+        
+        $this->assertEquals($point->x, 2);
+        $this->assertEquals($point->y, 0);
+        $this->assertEquals($point->z, 0);
+    }
+    
+    /**
+     * @covers Classes\Utils\Math\Lines::getPointOnLineWithOffset
+     */
+    public function testGetPointOnLineWithOffset_3() {
+        $p1 = new \Classes\Utils\AbstractInstance\Point(1,1,1);
+        $p2 = new \Classes\Utils\AbstractInstance\Point(5,5,5);
+        $line = new \Classes\Utils\AbstractInstance\Line($p1, $p2);
+        
+        $offset = 2 * sqrt(3);
+        $point = Lines::getPointOnLineWithOffset($line, $offset);
+        
+        $this->assertEquals($point->x, 3);
+        $this->assertEquals($point->y, 3);
+        $this->assertEquals($point->z, 3);
+    }
 }

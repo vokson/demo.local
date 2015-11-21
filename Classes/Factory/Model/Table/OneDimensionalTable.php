@@ -101,7 +101,7 @@ class OneDimensionalTable {
      */
     public function servicePrint() {
         foreach ($this->table as $uin => $connection) {
-            echo $uin . " = " . $connection->get() . "<br/>";
+            echo $uin . " = " . $connection->servicePrint() . "<br/>";
         }
     }
 

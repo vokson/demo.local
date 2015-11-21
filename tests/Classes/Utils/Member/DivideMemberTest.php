@@ -50,8 +50,8 @@ class DivideMemberTest extends \PHPUnit_Framework_TestCase
          \Classes\Factory\Model\Model::addInstance($member1);
                  
         // PINS
-        $pin1 = new \Classes\Factory\Connection\PinConnection('000011');
-        $pin2 = new \Classes\Factory\Connection\PinConnection('000111');
+        $pin1 = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection('000011');
+        $pin2 = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection('000111');
         
         // ADD TO HASH TABLE
         $hashTable = \Classes\Factory\Model\Model::getHashTable();
@@ -77,9 +77,9 @@ class DivideMemberTest extends \PHPUnit_Framework_TestCase
         $hashTable = \Classes\Factory\Model\Model::getHashTable();
         
         // PINS
-        $pin0 = new \Classes\Factory\Connection\PinConnection('000000');
-        $pin1 = new \Classes\Factory\Connection\PinConnection('000011');
-        $pin2 = new \Classes\Factory\Connection\PinConnection('000111');
+        $pin0 = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection('000000');
+        $pin1 = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection('000011');
+        $pin2 = new \Classes\Factory\Connection\SixFreedomConnection\PinConnection('000111');
         
         
         $this->assertNotSame($hashTable->getConnection($this->member1Uin, $this->node1Uin), $pin1);

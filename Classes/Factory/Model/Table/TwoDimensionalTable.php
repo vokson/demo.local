@@ -120,7 +120,7 @@ class TwoDimensionalTable {
     public function servicePrint() {
         foreach ($this->table as $sourceUin => $array) {
             foreach ($array as $targetUin => $connection) {
-                echo $sourceUin . " > " . $targetUin . " = " . $connection->get() . "<br/>";
+                echo $sourceUin . " > " . $targetUin . " = " . $connection->servicePrint() . "<br/>";
             }
         }
     }

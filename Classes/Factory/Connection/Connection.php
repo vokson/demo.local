@@ -24,4 +24,9 @@ abstract class Connection {
      */
     abstract public function get();
     
+    /*
+     * PRINT
+     */
+    abstract public function servicePrint();
+    
 }

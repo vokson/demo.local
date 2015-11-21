@@ -20,4 +20,11 @@ class GlobalCoordinateSystem extends \Classes\Factory\Connection\Connection{
     public function get() {
         return $this->connection;
     }
+    
+    /*
+     * PRINT
+     */
+    public function servicePrint() {
+        return "GLOBAL COORDINATE SYSTEM";
+    }
 }

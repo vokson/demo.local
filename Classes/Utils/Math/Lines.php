@@ -67,7 +67,7 @@ class Lines {
      * FALSE - No overlapping
      * TRUE - There is overlapping
      */
-    public function findOverlappingOfTwoLines($line1, $line2, &$overlap1, &$overlap2) {
+    public static function findOverlappingOfTwoLines($line1, $line2, &$overlap1, &$overlap2) {
         $isLine1Reversed = FALSE;
         
         // Check same line or not
@@ -169,5 +169,32 @@ class Lines {
         }
         
         return TRUE;
+    }
+    
+    /*
+     * Get Point's coordinates on Line with Offset from Begin
+     * 
+     * @param \Classes\Utils\AbstractInstance\Line $line Line
+     * @param double $offset Offset from begin
+     * 
+     * @return Classes\Utils\AbstractInstance\Point if $offset is inside ofLine
+     * @return FALSE if $offset is outside of Line
+     */
+    public static function getPointOnLineWithOffset($line, $offset) {
+        
+        $length = $line->length();
+        
+        if ( (0 - $offset) > Constant::epsilon || ($offset - $length) > Constant::epsilon) {
+            return FALSE;
+        }
+        
+        $x = $line->point1->x + ($line->point2->x - $line->point1->x) * $offset / $length;
+        $y = $line->point1->y + ($line->point2->y - $line->point1->y) * $offset / $length;
+        $z = $line->point1->z + ($line->point2->z - $line->point1->z) * $offset / $length;
+        
+        $point = new \Classes\Utils\AbstractInstance\Point($x, $y, $z);
+        
+        return $point;
+            
     }
 }

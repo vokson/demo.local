@@ -39,13 +39,30 @@ this->loadCases.push_back(LoadCase(3,"Wind", "Type=2  ReliabilityFactor=1.1  21 
 // +++ LOADS +++
 std::vector <double> loadVector;
 loadVector.clear();
+// Nodal Load
 loadVector.push_back(14.3);
 this->loads.push_back(Load(1, 6, 0, 1, loadVector));
 loadVector.clear();
+// Concentrated Member Load
 loadVector.push_back(-3.6);
 loadVector.push_back(1);
 this->loads.push_back(Load(1, 4, 15, 3, loadVector));
 loadVector.clear();
+// Nodal Load
 loadVector.push_back(6.6);
 this->loads.push_back(Load(2, 2, 0, 5, loadVector));
+loadVector.clear();
+// Distributed Member Load
+loadVector.push_back(2.3);
+loadVector.push_back(1);
+loadVector.push_back(3.2);
+loadVector.push_back(4);
+this->loads.push_back(Load(1, 3, 17, 2, loadVector));
+loadVector.clear();
+// Distributed Member Load
+loadVector.push_back(3);
+loadVector.push_back(0.5);
+loadVector.push_back(-5);
+loadVector.push_back(2.5);
+this->loads.push_back(Load(2, 5, 17, 3, loadVector));
 };

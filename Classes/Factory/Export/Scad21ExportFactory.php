@@ -161,6 +161,7 @@ class Scad21ExportFactory extends ExportFactory {
             
             // NODE LOAD
             if ($load instanceof \Classes\Instance\Load\Node\NodeLoad) {
+                 self::$txt[] = "// Nodal Load";
                 
                 $id = self::$nodes[$instanceTargetUin]->getProperty('id')->get();
                 $loadType = 0;
@@ -172,6 +173,7 @@ class Scad21ExportFactory extends ExportFactory {
             
             // CONCENTRATED MEMBER LOAD
             if ($load instanceof \Classes\Instance\Load\Member\ConcenratedMemberLoad) {
+                self::$txt[] = "// Concentrated Member Load";
                 
                 $id = self::$members[$instanceTargetUin]->getProperty('id')->get();
                 
@@ -192,6 +194,7 @@ class Scad21ExportFactory extends ExportFactory {
             
             // DISTRIBUTED MEMBER LOAD
             if ($load instanceof \Classes\Instance\Load\Member\DistributedMemberLoad) {
+                self::$txt[] = "// Distributed Member Load";
                 
                 $id = self::$members[$instanceTargetUin]->getProperty('id')->get();
                 

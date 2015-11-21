@@ -20,4 +20,11 @@ class LocalCoordinateSystem extends \Classes\Factory\Connection\Connection{
     public function get() {
         return $this->connection;
     }
+    
+    /*
+     * PRINT
+     */
+    public function servicePrint() {
+        return "LOCAL COORDINATE SYSTEM";
+    }
 }

@@ -28,7 +28,7 @@ class Line {
      * @return double
      */
     public function length() {
-        \Classes\Utils\Math\Points::twoPointsDistance($this->point1, $this->point2);
+       return \Classes\Utils\Math\Points::twoPointsDistance($this->point1, $this->point2);
     }
     
     /* 
