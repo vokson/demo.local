@@ -617,3 +617,6 @@
 127.0.0.1 - - [22/Nov/2015:09:59:00 +0300] "GET / HTTP/1.1" 200 6239 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"
 127.0.0.1 - - [22/Nov/2015:10:04:54 +0300] "GET / HTTP/1.1" 200 6239 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"
 127.0.0.1 - - [22/Nov/2015:10:06:36 +0300] "GET / HTTP/1.1" 200 6239 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"
+127.0.0.1 - - [22/Nov/2015:21:15:11 +0300] "GET / HTTP/1.1" 200 6239 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"
+127.0.0.1 - - [22/Nov/2015:21:15:12 +0300] "GET / HTTP/1.1" 200 6239 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"
+127.0.0.1 - - [22/Nov/2015:21:15:13 +0300] "GET /favicon.ico HTTP/1.1" 404 1178 "http://demo.local/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36"
