@@ -119,7 +119,7 @@ class DoubleNodes {
         //DELETE NODE
         \Classes\Factory\Model\Model::deleteInstance($uinAttach);
         
-        //CHANGE HASSH TABLE
+        //CHANGE HASH TABLE
         $hashTable = \Classes\Factory\Model\Model::getHashTable();
         $hashTable->replaceUin($uinAttach, $uinKeep);
         
@@ -137,7 +137,7 @@ class DoubleNodes {
             $x = self::$coordinates[$i][0];
             $y = self::$coordinates[$i][1];
             $z = self::$coordinates[$i][2];
-            echo "($x, $y, $z) - ". implode(',', self::$uins[$i]) ."<br/>";
+            echo "($x, $y, $z) - ". implode(', ', self::$uins[$i]) ."<br/>";
         }
     }
     

@@ -14,8 +14,9 @@ namespace Classes\Factory\Model\Table;
  * @author Noskov Alexey
  */
 class TwoDimensionalTable {
+
     protected $table = array(); // array to store hash table
-    
+
     /*
      * Add connection to Hash Table
      * 
@@ -24,36 +25,38 @@ class TwoDimensionalTable {
      * @param \Classes\Factory\Connection\Connection $connection Connection
      * 
      */
+
     public function setConnection($uin1, $uin2, $connection) {
         if (is_string($uin1) &&
-            is_string($uin2) &&
-            ($connection instanceof \Classes\Factory\Connection\Connection)) {
-            
+                is_string($uin2) &&
+                ($connection instanceof \Classes\Factory\Connection\Connection)) {
+
             $this->table[$uin1][$uin2] = $connection;
             $this->table[$uin2][$uin1] = $connection;
         }
     }
-    
+
     /*
      * Remove connection from Hash Table
      * 
      * @param string $uin1 Instance's UIN
      * @param string $uin2 Instance's UIN
      */
+
     public function removeConnection($uin1, $uin2) {
         if (is_string($uin1) &&
-            is_string($uin2)) {
-            
+                is_string($uin2)) {
+
             if (isset($this->table[$uin1][$uin2])) {
                 unset($this->table[$uin1][$uin2]);
             }
-            
+
             if (isset($this->table[$uin2][$uin1])) {
                 unset($this->table[$uin2][$uin1]);
             }
         }
     }
-    
+
     /*
      * Get connection from Hash Table
      * 
@@ -62,6 +65,7 @@ class TwoDimensionalTable {
      * 
      * @return mixed[] Connection from Hash Table
      */
+
     public function getConnection($uinSource, $uinTarget = NULL) {
         if (is_string($uinSource)) {
             if (isset($this->table[$uinSource])) {
@@ -78,23 +82,24 @@ class TwoDimensionalTable {
             }
         }
     }
-    
+
     /*
      * Replace UIN in HASH TABLE
      * 
      * @param string $from Instance's UIN
      * @param string $to Instance's UIN
      */
+
     public function replaceUin($from, $to) {
-        
+
         // Get connection related to uin1
         $connections = $this->getConnection($from);
-        
+
         // If there is NOT connection
         if (empty($connections)) {
             return;
         }
-        
+
         // Modify $to
         if (isset($this->table[$to])) {
             // Add $connections to $to
@@ -103,20 +108,28 @@ class TwoDimensionalTable {
             // Set $connection into $to
             $this->table[$to] = $connections;
         }
-        
+
         // Delete $from
         unset($this->table[$from]);
         
         // Change opposite connections
         foreach ($connections as $uin => $connect) {
-            unset($this->table[$uin][$from]);
-            $this->table[$uin][$to] = $connect;
+            // Get keys and values separately
+            $keys = array_keys($this->table[$uin]);
+            $values = array_values($this->table[$uin]);
+            
+            // Replace in $keys : $from -> $to
+            $keys = array_replace($keys, array_fill_keys( array_keys($keys, $from), $to));
+
+            // Combine new array
+            $this->table[$uin] = array_combine($keys, $values);
         }
     }
-    
+
     /*
      * Print Hash Table
      */
+
     public function servicePrint() {
         foreach ($this->table as $sourceUin => $array) {
             foreach ($array as $targetUin => $connection) {
@@ -124,4 +137,5 @@ class TwoDimensionalTable {
             }
         }
     }
+
 }

@@ -89,7 +89,7 @@ class Scad21ExportFactory extends ExportFactory {
             
             // Get RESTRAINT
             $restraint = 0;
-            if ($connection instanceof \Classes\Factory\Connection\RestraintConnection) {
+            if ($connection instanceof \Classes\Factory\Connection\SixFreedomConnection\RestraintConnection) {
                 $restraint = $connection->get();
             }
             
@@ -246,10 +246,10 @@ class Scad21ExportFactory extends ExportFactory {
             // Get PINS
             $pins = array_values($objectConnections);
             $pin1 = $pin2 = 0;
-            if ($pins[0] instanceof \Classes\Factory\Connection\PinConnection) {
+            if ($pins[0] instanceof \Classes\Factory\Connection\SixFreedomConnection\PinConnection) {
                 $pin1 = $pins[0]->get();
             }
-            if ($pins[1] instanceof \Classes\Factory\Connection\PinConnection) {
+            if ($pins[1] instanceof \Classes\Factory\Connection\SixFreedomConnection\PinConnection) {
                 $pin2 = $pins[1]->get();
             }
             

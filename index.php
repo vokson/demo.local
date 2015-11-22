@@ -6,7 +6,6 @@ spl_autoload_register();
 /** PHPExcel_IOFactory */
 include 'Classes/PHPExcel/IOFactory.php';
 
-
 try {
     // UPLOAD STEEL MEMBERS
     $uploadFactory = new \Classes\Factory\Import\Instance\InstanceUploaderFromExcel();
@@ -40,6 +39,7 @@ try {
     }
     
     // UPLOAD LOADS
+    
     $memberLoadArray = $uploadFactory->upload('./Source/Excel/Loads_01.xlsx',
             new \Classes\Instance\Load\Member\CommonMemberLoad);
     
@@ -51,10 +51,11 @@ try {
         $name = $object->getProperty('name')->get();
         if (!$isFound) {
             echo "LOAD $name IS NOT FOUND<br/>";
-        } else {
-            echo "LOAD $name IS FOUND<br/>";
+            var_dump($notFoundObjects);
         }
     }
+    echo "<br/>";
+     
     
     // NUMERATION
     \Classes\Utils\Member\Numeration::numerateFromOne();
