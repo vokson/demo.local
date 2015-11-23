@@ -26,8 +26,11 @@ class ListboxActionCollection {
             return FALSE;
         }
         
-        $this->currentActionIndex++;
-        $this->actionArray[$this->currentActionIndex] = $action;
+        // If any ListBox has been already registered in Collection, add action
+        if (count($this->lastActionIndexArray) > 0) {
+            $this->currentActionIndex++;
+            $this->actionArray[$this->currentActionIndex] = $action;
+        }
         
         return TRUE;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Classes\Utils\Section;
+namespace Classes\Utils\Section\Steel;
 
 /**
  * Class make string naem of section type

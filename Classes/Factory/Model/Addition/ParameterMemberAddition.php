@@ -3,16 +3,16 @@
 namespace Classes\Factory\Model\Addition;
 
 /**
- * Class for addition SteelMember to Model
+ * Class for addition ParameterMember to Model
  *
  * @author Noskov Alexey
  */
-class SteelMemberAddition {
+class ParameterMemberAddition {
    
     /*
      * Add Object to Model
      * 
-     * @param \Classes\Instance\Member\SteelMember $object
+     * @param \Classes\Instance\Member\ParameterMember $object
      */
     public static function add($object) {
         
@@ -36,9 +36,14 @@ class SteelMemberAddition {
         
         // SECTION
         $sectionString = NULL;
-        if (\Classes\Utils\Section\Steel\SectionType::steelProfile($sectionString,
+        if (\Classes\Utils\Section\Parameter\SectionType::parameterSectionName($sectionString,
+                $object->getProperty('E')->get(),
+                $object->getProperty('nu')->get(),
+                $object->getProperty('density')->get(),
+                $object->getProperty('tmp')->get(),
                 $object->getProperty('sectionType')->get(),
-                $object->getProperty('sectionName')->get())) {
+                $object->getProperty('sectionProperty')->get()
+                )) {
             
             $section = new \Classes\Value\StringValue($sectionString);
 //            var_dump($sectionString);

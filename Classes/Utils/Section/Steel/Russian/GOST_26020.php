@@ -1,13 +1,13 @@
 <?php
 
-namespace Classes\Utils\Section\Russian;
+namespace Classes\Utils\Section\Steel\Russian;
 
 /**
  * Class make string naem of section type
  *
  * @author Noskov Alexey
  */
- class GOST_26020 extends \Classes\Utils\Section\Assortment {
+ class GOST_26020 extends \Classes\Utils\Section\Steel\Assortment {
      
     protected $collection = array(
              "10B1" => "STZ RUSSIAN p_norm_b 1",

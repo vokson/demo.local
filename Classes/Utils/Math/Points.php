@@ -14,7 +14,6 @@ namespace Classes\Utils\Math;
  * @author Noskov Alexey
  */
 class Points {
-    
     /*
      * Check if coordinates of two points are same
      * 
@@ -23,34 +22,33 @@ class Points {
      * 
      * @return bool
      */
+
     public static function isPointSame($point1, $point2) {
-        
-        if ( (abs($point1->x - $point2->x) <= \Classes\Factory\Model\Model::coordinateTolerance) && 
-             (abs($point1->y - $point2->y) <= \Classes\Factory\Model\Model::coordinateTolerance) &&
-             (abs($point1->z - $point2->z) <= \Classes\Factory\Model\Model::coordinateTolerance)) {
+
+        if ((abs($point1->x - $point2->x) <= \Classes\Factory\Model\Model::coordinateTolerance) &&
+                (abs($point1->y - $point2->y) <= \Classes\Factory\Model\Model::coordinateTolerance) &&
+                (abs($point1->z - $point2->z) <= \Classes\Factory\Model\Model::coordinateTolerance)) {
             return TRUE;
         } else {
             return FALSE;
         }
     }
-    
+
     /*
      * Get distance between two points
-     
+
      * @param Classes\Utils\AbstractInstance\Point $point1
      * @param Classes\Utils\AbstractInstance\Point $point2
      * 
      * @return bool
      */
-    
-     public static function twoPointsDistance($point1, $point2) {
-         return sqrt(
-                  pow($point1->x-$point2->x, 2)
-                + pow($point1->y-$point2->y, 2)
-                + pow($point1->z-$point2->z, 2)
-         );
-     }
-    
+
+    public static function twoPointsDistance($point1, $point2) {
+        return sqrt(
+                pow($point1->x - $point2->x, 2) + pow($point1->y - $point2->y, 2) + pow($point1->z - $point2->z, 2)
+        );
+    }
+
     /*
      * Check if point is laying on line
      * Point (x,y,z) - Line (x1,y1,z1)(x2,y2,z2)
@@ -72,12 +70,29 @@ class Points {
      * 3 - ТОЧКА ВНУТРИ ОТРЕЗКА
      * 4 - ТОЧКА И ОБА КОНЦА - ЭТО ОДНА ТОЧКА
      */
+
     public static function isPointOnLine($point, $line) {
-        
+//        $minX = min($line->point1->x, $line->point2->x);
+//        $maxX = min($line->point1->x, $line->point2->x);
+//        $minY = min($line->point1->y, $line->point2->y);
+//        $maxY = min($line->point1->y, $line->point2->y);
+//        $minZ = min($line->point1->z, $line->point2->z);
+//        $maxZ = min($line->point1->z, $line->point2->z);
+//
+//        if ($minX - $point->x > \Classes\Factory\Model\Model::coordinateTolerance ||
+//            $point->x - $maxX > \Classes\Factory\Model\Model::coordinateTolerance ||
+//            $minY - $point->y > \Classes\Factory\Model\Model::coordinateTolerance ||
+//            $point->y - $maxY > \Classes\Factory\Model\Model::coordinateTolerance ||
+//            $minZ - $point->z > \Classes\Factory\Model\Model::coordinateTolerance ||
+//            $point->z - $maxZ > \Classes\Factory\Model\Model::coordinateTolerance
+//        ) {
+//            return 0;
+//        }
+
         $dx = $line->point1->x - $line->point2->x;
         $dy = $line->point1->y - $line->point2->y;
         $dz = $line->point1->z - $line->point2->z;
-        
+
         // Create array of p
         $p = array();
         if (!Constant::isNumbersEqual($dx, 0)) {
@@ -96,7 +111,7 @@ class Points {
                 return 0;
             }
         }
-        
+
         if (!Constant::isNumbersEqual($dz, 0)) {
             $p[] = ($point->z - $line->point2->z) / $dz;
         } else {
@@ -105,36 +120,39 @@ class Points {
                 return 0;
             }
         }
-        
+
         // CASE 4
-        if (count($p) == 0) {return 4;}
-        
+        if (count($p) == 0) {
+            return 4;
+        }
+
         // All members in p array must be same
         $isEqual = TRUE;
         if (count($p) > 1) {
-            for ($i=1; $i<count($p); $i++) {
+            for ($i = 1; $i < count($p); $i++) {
                 if (!Constant::isNumbersEqual($p[$i], $p[0])) {
                     $isEqual = FALSE;
                 }
             }
         }
-        
+
         // CASE 0
         if (!$isEqual) {
             return 0;
         }
-            
+
         // CASE 2
         if (Constant::isNumbersEqual($p[0], 0) || Constant::isNumbersEqual($p[0], 1)) {
             return 2;
         }
-        
+
         // CASE 3
         if ($p[0] > 0 && $p[0] < 1) {
             return 3;
         }
-        
+
         // CASE 1
         return 1;
     }
+
 }
