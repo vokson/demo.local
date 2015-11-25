@@ -15,56 +15,91 @@ namespace Classes\Utils\Node;
  */
 class DoubleNodes {
     
-    private static $coordinates = array(); // Array with coordinates of double nodes
-    private static $uins = array(); // Array with uins of double nodes
+    private static $coordinates; // Array with coordinates of double nodes
+    private static $uins; // Array with uins of double nodes
     
     /*
-     * Find double nodes
+     * Find double nodes. Long algorythm.
+     */
+//    private static function find1() {
+//        
+//        self::$uins = array();
+//        self::$coordinates = array();
+//        
+//       // Check all nodes
+//        $nodes = \Classes\Factory\Model\Model::getNodes();
+//        
+//        foreach ($nodes as $node) {
+//            
+//            // Get $node coordinates
+//            $pointNode = new \Classes\Utils\AbstractInstance\Point(
+//                    $node->getProperty('x')->get(),
+//                    $node->getProperty('y')->get(),
+//                    $node->getProperty('z')->get()
+//                    );
+//            
+//            $isFound = false;
+//            $i = 0;
+//            
+//            while ($i < count(self::$coordinates) && $isFound === FALSE) {
+//                
+//                // Get coordinates of checked node
+//                $pointExist = new \Classes\Utils\AbstractInstance\Point(
+//                    self::$coordinates[$i][0],
+//                    self::$coordinates[$i][1],
+//                    self::$coordinates[$i][2]
+//                    );
+//                
+//                // Check same point or not
+//                $isPointSame = \Classes\Utils\Math\Points::isPointSame($pointNode, $pointExist);
+//                
+//                // SAME
+//                if ($isPointSame) {
+//                    self::$uins[$i][] = $node->getUin();
+//                    $isFound = TRUE;
+//                } 
+//                
+//                $i++;
+//            }
+//            
+//            // NOT FOUND
+//            if (!$isFound) {
+//                // ADD to existing nodes
+//                self::$coordinates[] = array($pointNode->x, $pointNode->y, $pointNode->z);
+//                self::$uins[] = array($node->getUin());
+//            }
+//        }
+//        
+//        // Check all nodes found or not
+//        if (array_sum(array_map("count", self::$uins)) != count($nodes)) {
+//            throw new \Classes\Exception\Utils\Node\DoubleNodeException
+//                ('Problem is obtained during searching of double nodes');
+//        }
+//    }
+    
+    
+    
+    
+    /*
+     * Find double nodes. Long algorythm.
      */
     private static function find() {
+        
+        self::$uins = array();
+        $precision = round (log10(1/\Classes\Factory\Model\Model::coordinateTolerance));
         
        // Check all nodes
         $nodes = \Classes\Factory\Model\Model::getNodes();
         
+        
         foreach ($nodes as $node) {
+            $nodeCoordinates =
+                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('x')->get(), $precision) . ';' .
+                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('y')->get(), $precision) . ';' .
+                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('z')->get(), $precision);
             
-            // Get $node coordinates
-            $pointNode = new \Classes\Utils\AbstractInstance\Point(
-                    $node->getProperty('x')->get(),
-                    $node->getProperty('y')->get(),
-                    $node->getProperty('z')->get()
-                    );
-            
-            $isFound = false;
-            $i = 0;
-            
-            while ($i < count(self::$coordinates) && $isFound === FALSE) {
-                
-                // Get coordinates of checked node
-                $pointExist = new \Classes\Utils\AbstractInstance\Point(
-                    self::$coordinates[$i][0],
-                    self::$coordinates[$i][1],
-                    self::$coordinates[$i][2]
-                    );
-                
-                // Check same point or not
-                $isPointSame = \Classes\Utils\Math\Points::isPointSame($pointNode, $pointExist);
-                
-                // SAME
-                if ($isPointSame) {
-                    self::$uins[$i][] = $node->getUin();
-                    $isFound = TRUE;
-                } 
-                
-                $i++;
-            }
-            
-            // NOT FOUND
-            if (!$isFound) {
-                // ADD to existing nodes
-                self::$coordinates[] = array($pointNode->x, $pointNode->y, $pointNode->z);
-                self::$uins[] = array($node->getUin());
-            }
+//            echo "NODE COORDINATES = $nodeCoordinates<br/>";
+            self::$uins[$nodeCoordinates][] = $node->getUin();
         }
         
         // Check all nodes found or not
@@ -73,6 +108,7 @@ class DoubleNodes {
                 ('Problem is obtained during searching of double nodes');
         }
     }
+    
     
     /*
      * Get double nodes

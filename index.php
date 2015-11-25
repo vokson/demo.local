@@ -12,7 +12,8 @@ try {
     // UPLOAD STEEL MEMBERS
     Classes\Utils\Timer\Timer::start('STEEL_MEMBER_UPLOAD');
     $uploadFactory = new \Classes\Factory\Import\Instance\InstanceUploaderFromExcel();
-    $steelMemberArray = $uploadFactory->upload('./Source/Excel/Test/Member200.xlsx',
+    $steelMemberArray = $uploadFactory->upload('./Source/Excel/Test/Member10.xlsx',
+//    $steelMemberArray = $uploadFactory->upload('./Source/Excel/Simple_Piperack/Steel_Members_01.xlsx',
             new \Classes\Instance\Member\SteelMember);
     
     foreach ($steelMemberArray as &$object) {
@@ -37,9 +38,9 @@ try {
     Classes\Utils\Timer\Timer::stop('COMBINE_DOUBLE_NODES');
     
     // DIVIDE MEMBERS BY NODES
-    Classes\Utils\Timer\Timer::start('DIVIDE_ALL_MEMBERS');
-    \Classes\Utils\Member\DivideMember::divideAllMembersByExistingNodes();
-    Classes\Utils\Timer\Timer::stop('DIVIDE_ALL_MEMBERS');
+//    Classes\Utils\Timer\Timer::start('DIVIDE_ALL_MEMBERS');
+//    \Classes\Utils\Member\DivideMember::divideAllMembersByExistingNodes();
+//    Classes\Utils\Timer\Timer::stop('DIVIDE_ALL_MEMBERS');
     
     // UPLOAD CONSTRAINTS
 //    $constraintArray = $uploadFactory->upload('./Source/Excel/Constraint_01.xlsx',

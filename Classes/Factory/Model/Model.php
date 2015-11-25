@@ -9,7 +9,8 @@ namespace Classes\Factory\Model;
  */
 class Model {
     
-    const coordinateTolerance = 0.01; //Tolerance in meters
+    //Tolerance in meters. Use 10^x (x < -1) ONLY. Like 0.1, 0.01, 0.001..
+    const coordinateTolerance = 0.001; 
     
     private static $nodes = array(); // Collection of nodes in model
     private static $members = array(); // Collection of rod members in model

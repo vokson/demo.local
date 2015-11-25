@@ -96,4 +96,18 @@ class Constant {
         return $new_array;
     }
 
+    
+    /*
+     * Get string coordinate
+     * 
+     * @param double $value Value
+     * @param int $precision Presicion
+     * 
+     * @return string String with value rounded for necessary precision
+     */
+    static function stringValue($value, $precision) {
+        $roundedValue = round($value, $precision);
+        
+        return sprintf("%." . $precision . "f", $roundedValue);
+    }
 }
