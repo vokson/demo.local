@@ -31,6 +31,39 @@ class Node extends \Classes\Instance\Instance {
     }
     
     /*
+     * Comparison of two Nodes. Return
+     * a < b = -1
+     * a == b = 0
+     * a > b = 1
+     * 
+     * @param Classes\Instance\Node\Node $a Point 1
+     * @param Classes\Instance\Node\Node $b Point 2
+     * @param double $tolerance Value of tolerance btw Point's coordinates
+     * 
+     * return int 
+     */
+    static function compare($a, $b, $tolerance) {
+        
+        $dx = $a->getProperty('x')->get() - $b->getProperty('x')->get();
+        $dy = $a->getProperty('y')->get() - $b->getProperty('y')->get();
+        $dz = $a->getProperty('z')->get() - $b->getProperty('z')->get();
+       
+        if ($dx > $tolerance) {return 1;}
+        if ($dx < -$tolerance) {return -1;}
+        
+        // if |DX| <= $tolerance
+        if ($dy > $tolerance) {return 1;}
+        if ($dy < -$tolerance) {return -1;}
+        
+        // if |DX| && |DY| <= $tolerance
+        if ($dz > $tolerance) {return 1;}
+        if ($dz < -$tolerance) {return -1;}
+        
+        // if |DX| && |DY| && |DZ| <= $tolerance
+        return 0;
+    }
+    
+    /*
      * PRINT
      */
     public function servicePrint() {

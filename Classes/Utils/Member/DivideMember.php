@@ -10,6 +10,8 @@ namespace Classes\Utils\Member;
 class DivideMember {
     /*
      * Divide member in two parts by Node
+     * Change OLD member => Keep 1st node. Move 2nd node to middle
+     * Create NEW member => Set 1st node as middle. Set 2nd node as end of old member
      * 
      * @param string $memberUin Uin of member
      * @param string $nodeUin Uin of node
@@ -76,107 +78,88 @@ class DivideMember {
         return $newMember->getUin();
     }
 
-    /*
-     * Divide one member by existing nodes
-     * 
-     * @param string $memberUin Uin of member
-     * @param Classes\Instance\Node\Node $nodes Array of nodes
-     * 
-     * @return bool Success or not
-     */
-
-    public static function divideMemberByNodes($memberUin, $nodes) {
-//        echo "+++ divideMemberByNodes +++ <br/>";
-//        echo "MEMBER = $memberUin<br/>";
-//        $serviceArray = array();
-//        foreach ($nodes as $node) {
-//            $serviceArray[] = $node->getUin();
-//        }
-//        echo "NODES = " . implode(",", $serviceArray) . "<br/>";
-
-        // Get nodes and members
-        $allNodes = \Classes\Factory\Model\Model::getNodes();
-        $members = \Classes\Factory\Model\Model::getMembers();
-        $hashTable = \Classes\Factory\Model\Model::getHashTable();
-
-        // TODO isDivided
-        
-        //Check is member exist or not
-        if (!isset($members[$memberUin])) {
-            return FALSE;
-        }
-        
-        // Check if member is divided
-         if ($members[$memberUin]->getProperty('isDivided')->get() == FALSE) {
-            return FALSE;
-        }
-
-        $isDivided = TRUE;
-        foreach ($nodes as $key => $node) {
-
-            // If member has been divided, update Line's points
-            if ($isDivided) {
-                // Get coordinates of members' ends
-                $hash = $hashTable->getConnection($memberUin);
-
-                $node1 = $allNodes[array_keys($hash)[0]];
-                $point1 = new \Classes\Utils\AbstractInstance\Point(
-                        $node1->getProperty('x')->get(),
-                        $node1->getProperty('y')->get(),
-                        $node1->getProperty('z')->get()
-                );
-
-                $node2 = $allNodes[array_keys($hash)[1]];
-                $point2 = new \Classes\Utils\AbstractInstance\Point(
-                        $node2->getProperty('x')->get(),
-                        $node2->getProperty('y')->get(),
-                        $node2->getProperty('z')->get()
-                );
-                //Create Line
-                $line = new \Classes\Utils\AbstractInstance\Line($point1, $point2);
-                
-                // Set flag
-                $isDivided = FALSE;
-            }
-
-            // Get $node coordinates
-            $pointNode = new \Classes\Utils\AbstractInstance\Point(
-                    $node->getProperty('x')->get(), $node->getProperty('y')->get(), $node->getProperty('z')->get()
-            );
-
-            // Delete node from array
-            unset($nodes[$key]);
-
-            // If point is inside line
-            if (\Classes\Utils\Math\Points::isPointOnLine($pointNode, $line) == 3) {
-
-                // Divide Member
-                $newMemberUin = self::divideMemberByNode($memberUin, $node->getUin());
-
-                //Start to divide new member by remaining nodes
-                if (!empty($nodes)) {
-                    self::divideMemberByNodes($newMemberUin, $nodes);
-                }
-                
-                $isDivided = TRUE;
-            }
-        }
-    }
-
-    /*
+    
+     /*
      * Divide all members by existing nodes
      * 
      * @return bool Success or not
      */
 
     public static function divideAllMembersByExistingNodes() {
+        
+        \Classes\Factory\Model\Model::sortNodes();
+    
+        
         // Get nodes and members
         $nodes = \Classes\Factory\Model\Model::getNodes();
-        $members = \Classes\Factory\Model\Model::getMembers();
+        $hashTable = \Classes\Factory\Model\Model::getHashTable();
+        
+        // Array [uin] => [0 - 1st point, 1 - 2nd point]
+        $actualMemberUins = array();
 
-        foreach ($members as $member) {
-            self::divideMemberByNodes($member->getUin(), $nodes);
+        foreach ($nodes as $node) {
+            
+            // Get $node coordinates
+            $point = \Classes\Utils\AbstractInstance\Point::createFromNode($node);
+            
+            $nodeUin = $node->getUin();
+            $connections = $hashTable->getConnection($nodeUin);
+            
+//            echo "NODE (" . $node->getProperty('x')->get() . ", " .
+//                            $node->getProperty('y')->get() . ", " .
+//                            $node->getProperty('z')->get() . ")   ";
+//            
+//            echo "ACTUAL MEMBERS COUNT = " . count($actualMemberUins) . "<br/>";
+//            echo "CONNECTIONS: " . implode('; ', array_keys($connections)) . "<br/>";
+            
+            //Change $actualMemberUins array
+            if (count($connections) > 0) {
+                
+                foreach ($connections as $uin => $c) {
+                    // Here $uin is uin of member connected with node
+                    
+                    if (isset($actualMemberUins[$uin])) {
+                        // If member is already included in $actualMemberUins -> delete it
+                        unset($actualMemberUins[$uin]);
+                    } else {
+                        // If member is NOT included in $actualMemberUins -> add it
+                        $keys = array_keys($hashTable->getConnection($uin));
+                        $endNumber = array_search($nodeUin, $keys);
+                        $actualMemberUins[$uin] = $endNumber;
+                    }
+                }
+                    
+            }
+            
+            // Divide $actualMemberUins by $node
+            foreach ($actualMemberUins as $memberUin => $endNumber) {
+                
+                // Get coordinates of members' ends
+                $memberEndUins = array_keys($hashTable->getConnection($memberUin));
+                $node1 = $nodes[$memberEndUins[0]];
+                $node2 = $nodes[$memberEndUins[1]];
+                $line = \Classes\Utils\AbstractInstance\Line::createFromTwoNodes($node1, $node2);
+                
+                // If point is inside line
+                if (\Classes\Utils\Math\Points::isPointOnLine($point, $line) == 3) {
+                
+                    // Divide member by node
+                    $newMemberUin = self::divideMemberByNode($memberUin, $nodeUin);
+                    // If intersection found AND member's begin before sweep line
+                    if ($newMemberUin != FALSE && $endNumber == 0) {
+                        // Delete old member from actual array
+                        unset($actualMemberUins[$memberUin]);
+                        // Add new member to actual array (member's begin also before sweep line)
+                        $actualMemberUins[$newMemberUin] = 0;
+                    }
+                    // If intersection found AND member's begin after sweep line
+                    // it's necessary to do nothing, because divided member is
+                    // still located after sweep line
+                }
+            }
         }
+        
+        
     }
 
 }

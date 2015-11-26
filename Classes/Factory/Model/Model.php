@@ -10,7 +10,7 @@ namespace Classes\Factory\Model;
 class Model {
     
     //Tolerance in meters. Use 10^x (x < -1) ONLY. Like 0.1, 0.01, 0.001..
-    const coordinateTolerance = 0.001; 
+    const coordinateTolerance = 0.01; 
     
     private static $nodes = array(); // Collection of nodes in model
     private static $members = array(); // Collection of rod members in model
@@ -96,6 +96,29 @@ class Model {
      */
     public static function &getNodes() {
         return self::$nodes;
+    }
+    
+    /*
+     * Sort nodes
+     * 
+     * @return bool Success or NOT
+     */
+    static public function sortNodes() {
+        $values = array_values(self::$nodes);
+
+        $isSorted = usort($values, function ($a, $b) {
+            return \Classes\Instance\Node\Node::compare($a, $b,
+                    self::coordinateTolerance);
+        });
+        
+        if ($isSorted) {
+            self::$nodes = array();
+            foreach($values as $node) {
+                self::$nodes[$node->getUin()] = $node;
+            }
+        }
+        
+        return $isSorted;
     }
     
     /*

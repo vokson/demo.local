@@ -23,6 +23,20 @@ class Line {
     }
     
     /*
+     * Create line from two nodes
+     * 
+     * @param \Classes\Instance\Node\Node $node1 Node 1
+     * @param \Classes\Instance\Node\Node $node2 Node 2
+     * 
+     * return \Classes\Utils\AbstractInstance\Line Line
+     */
+    public static function createFromTwoNodes($node1, $node2) {
+
+        $line = new self(Point::createFromNode($node1), Point::createFromNode($node2));
+    	return $line;
+    }
+    
+    /*
      * Get length
      * 
      * @return double
@@ -39,4 +53,6 @@ class Line {
         $this->point1 = $this->point2;
         $this->point2 = $temp;
     }
+    
+    
 }

@@ -83,6 +83,86 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $this->object->setProperty();
     }
     
+    /**
+     * @covers Classes\Instance\Node\Node::compare
+     */
+    public function testCompare_1()
+    {
+        $a = new Node();
+        $a->setProperty('x',new \Classes\Value\FloatValue(1));
+        $a->setProperty('y',new \Classes\Value\FloatValue(2));
+        $a->setProperty('z',new \Classes\Value\FloatValue(3));
+        
+        $b = new Node();
+        $b->setProperty('x',new \Classes\Value\FloatValue(1.05));
+        $b->setProperty('y',new \Classes\Value\FloatValue(1.94));
+        $b->setProperty('z',new \Classes\Value\FloatValue(3.01));
+
+        $tolerance = 0.1;
+        
+        $this->assertEquals(Node::compare($a, $b, $tolerance), 0);
+    }
+    
+    /**
+     * @covers Classes\Instance\Node\Node::compare
+     */
+    public function testCompare_2()
+    {
+        $a = new Node();
+        $a->setProperty('x',new \Classes\Value\FloatValue(1.5));
+        $a->setProperty('y',new \Classes\Value\FloatValue(2));
+        $a->setProperty('z',new \Classes\Value\FloatValue(3));
+        
+        $b = new Node();
+        $b->setProperty('x',new \Classes\Value\FloatValue(1));
+        $b->setProperty('y',new \Classes\Value\FloatValue(1.5));
+        $b->setProperty('z',new \Classes\Value\FloatValue(1.5));
+
+        $tolerance = 0.1;
+        
+        $this->assertEquals(Node::compare($a, $b, $tolerance), 1);
+    }
+    
+    /**
+     * @covers Classes\Instance\Node\Node::compare
+     */
+    public function testCompare_3()
+    {
+        $a = new Node();
+        $a->setProperty('x',new \Classes\Value\FloatValue(1));
+        $a->setProperty('y',new \Classes\Value\FloatValue(0));
+        $a->setProperty('z',new \Classes\Value\FloatValue(2));
+        
+        $b = new Node();
+        $b->setProperty('x',new \Classes\Value\FloatValue(1));
+        $b->setProperty('y',new \Classes\Value\FloatValue(1));
+        $b->setProperty('z',new \Classes\Value\FloatValue(1));
+
+        $tolerance = 0.1;
+        
+        $this->assertEquals(Node::compare($a, $b, $tolerance), -1);
+    }
+    
+    /**
+     * @covers Classes\Instance\Node\Node::compare
+     */
+    public function testCompare_4()
+    {
+        $a = new Node();
+        $a->setProperty('x',new \Classes\Value\FloatValue(1));
+        $a->setProperty('y',new \Classes\Value\FloatValue(1));
+        $a->setProperty('z',new \Classes\Value\FloatValue(2));
+        
+        $b = new Node();
+        $b->setProperty('x',new \Classes\Value\FloatValue(1));
+        $b->setProperty('y',new \Classes\Value\FloatValue(1));
+        $b->setProperty('z',new \Classes\Value\FloatValue(1));
+
+        $tolerance = 0.1;
+        
+        $this->assertEquals(Node::compare($a, $b, $tolerance), 1);
+    }
+    
     
 
     
