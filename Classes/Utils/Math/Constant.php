@@ -105,13 +105,13 @@ class Constant {
      * 
      * @return string String with value rounded for necessary precision
      */
-    static function stringValue($value, $precision) {
-        if ($value > 0) {
-            $intPart = floor($value/\Classes\Factory\Model\Model::coordinateTolerance);
-        } else {
-            $intPart = ceil($value/\Classes\Factory\Model\Model::coordinateTolerance);
-        }
-        
-        return sprintf("%." . $precision . "f", $intPart * \Classes\Factory\Model\Model::coordinateTolerance);
-    }
+//    static function stringValue($value, $precision) {
+//        if ($value > 0) {
+//            $intPart = floor($value/\Classes\Factory\Model\Model::coordinateTolerance);
+//        } else {
+//            $intPart = ceil($value/\Classes\Factory\Model\Model::coordinateTolerance);
+//        }
+//        
+//        return sprintf("%." . $precision . "f", $intPart * \Classes\Factory\Model\Model::coordinateTolerance);
+//    }
 }

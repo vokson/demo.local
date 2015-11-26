@@ -87,9 +87,6 @@ class DivideMember {
 
     public static function divideAllMembersByExistingNodes() {
         
-        \Classes\Factory\Model\Model::sortNodes();
-    
-        
         // Get nodes and members
         $nodes = \Classes\Factory\Model\Model::getNodes();
         $hashTable = \Classes\Factory\Model\Model::getHashTable();
