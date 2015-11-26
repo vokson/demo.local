@@ -72,22 +72,6 @@ class Points {
      */
 
     public static function isPointOnLine($point, $line) {
-//        $minX = min($line->point1->x, $line->point2->x);
-//        $maxX = min($line->point1->x, $line->point2->x);
-//        $minY = min($line->point1->y, $line->point2->y);
-//        $maxY = min($line->point1->y, $line->point2->y);
-//        $minZ = min($line->point1->z, $line->point2->z);
-//        $maxZ = min($line->point1->z, $line->point2->z);
-//
-//        if ($minX - $point->x > \Classes\Factory\Model\Model::coordinateTolerance ||
-//            $point->x - $maxX > \Classes\Factory\Model\Model::coordinateTolerance ||
-//            $minY - $point->y > \Classes\Factory\Model\Model::coordinateTolerance ||
-//            $point->y - $maxY > \Classes\Factory\Model\Model::coordinateTolerance ||
-//            $minZ - $point->z > \Classes\Factory\Model\Model::coordinateTolerance ||
-//            $point->z - $maxZ > \Classes\Factory\Model\Model::coordinateTolerance
-//        ) {
-//            return 0;
-//        }
 
         $dx = $line->point1->x - $line->point2->x;
         $dy = $line->point1->y - $line->point2->y;

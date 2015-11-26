@@ -22,35 +22,36 @@ class DoubleNodes {
     /*
      * Find double nodes. Short algorythm.
      */
-//    private static function find() {
-//        
-//        self::$uins = array();
-//        $precision = round (log10(1/\Classes\Factory\Model\Model::coordinateTolerance));
-//        
-//       // Check all nodes
-//        $nodes = \Classes\Factory\Model\Model::getNodes();
-//        
-//        
-//        foreach ($nodes as $node) {
-//            $nodeCoordinates =
-//                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('x')->get(), $precision) . ';' .
-//                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('y')->get(), $precision) . ';' .
-//                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('z')->get(), $precision);
-//            
-////            echo "NODE COORDINATES = $nodeCoordinates<br/>";
-//            self::$uins[$nodeCoordinates][] = $node->getUin();
-//        }
-//        
-//        // Check all nodes found or not
-//        if (array_sum(array_map("count", self::$uins)) != count($nodes)) {
-//            throw new \Classes\Exception\Utils\Node\DoubleNodeException
-//                ('Problem is obtained during searching of double nodes');
-//        }
-//    }
+    private static function find() {
+        
+        self::$uins = array();
+        $precision = round (log10(1/\Classes\Factory\Model\Model::coordinateTolerance));
+        
+       // Check all nodes
+        $nodes = \Classes\Factory\Model\Model::getNodes();
+        
+        
+        foreach ($nodes as $node) {
+            $nodeCoordinates =
+                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('x')->get(), $precision) . ';' .
+                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('y')->get(), $precision) . ';' .
+                    \Classes\Utils\Math\Constant::stringValue($node->getProperty('z')->get(), $precision);
+            
+//            echo "NODE COORDINATES = $nodeCoordinates<br/>";
+            self::$uins[$nodeCoordinates][] = $node->getUin();
+        }
+        
+        // Check all nodes found or not
+        if (array_sum(array_map("count", self::$uins)) != count($nodes)) {
+            throw new \Classes\Exception\Utils\Node\DoubleNodeException
+                ('Problem is obtained during searching of double nodes');
+        }
+    }
     
     /*
      * Find double nodes. Nodes in Model MUST be sorted.
      */
+    /*
     private static function find() {
         
         self::$uins = array();
@@ -61,7 +62,7 @@ class DoubleNodes {
         
         // Set 1st node into UINs array
         $k = 0;
-        self::$uins[0] = $nodes[0]->getUin();
+        self::$uins[0][] = $nodes[0]->getUin();
         
         // Check double nodes
         for ($i =1; $i < count($nodes); $i++) {
@@ -77,6 +78,7 @@ class DoubleNodes {
             self::$uins[$k][] = $nodes[$i]->getUin();
         }
     }
+    */
     
     /*
      * Combine ALL double nodes

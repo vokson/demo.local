@@ -86,6 +86,10 @@ class DivideMember {
      */
 
     public static function divideAllMembersByExistingNodes() {
+        // SORT NODES
+        \Classes\Utils\Timer\Timer::start('SORT_NODES');
+        \Classes\Factory\Model\Model::sortNodes();
+        \Classes\Utils\Timer\Timer::start('SORT_NODES');
         
         // Get nodes and members
         $nodes = \Classes\Factory\Model\Model::getNodes();

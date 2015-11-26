@@ -198,6 +198,11 @@ class MemberLoadAddition {
              
             // Prepare Line
              $line = new \Classes\Utils\AbstractInstance\Line($node1Point, $node2Point);
+             
+//             if ($node1Point->x == 2.0 && $node1Point->y == 2.6 && $node1Point->z == 15.0 &&
+//                 $node2Point->x == 2.6 && $node2Point->y == 2.0 && $node2Point->z == 15.0) {
+//                 echo "HERE<br/>";
+//             }
             
             // Compare coordinates
             if (\Classes\Utils\Math\Points::isPointOnLine($loadPoint, $line) == 3) {
@@ -366,7 +371,7 @@ class MemberLoadAddition {
                     $endObject->setProperty('z1', new \Classes\Value\FloatValue($beginPoint->z));
                     $endObject->setProperty('value1', $loadValue2);
                     
-                    self::addMemberDistributedLoadByMembers(array_slice($members, $i+1), $beginObject);
+                    self::addMemberDistributedLoadByMembers(array_slice($members, $i+1), $endObject);
                 }
                 
             }

@@ -27,7 +27,7 @@ class InstanceUploaderFromExcel extends InstanceUploader {
         //Read Excel file
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
         $sheetData = $objPHPExcel->getActiveSheet()->toArray();
-
+        
         //Prepare return array
         $array = array();
 
@@ -73,6 +73,7 @@ class InstanceUploaderFromExcel extends InstanceUploader {
                 $array[] = $instance;
             }
         }
+        
         return $array;
     }
 
