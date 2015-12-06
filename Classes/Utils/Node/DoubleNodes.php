@@ -17,6 +17,7 @@ class DoubleNodes {
     
     private static $coordinates; // Array with coordinates of double nodes
     private static $uins; // Array with uins of double nodes
+    private static $hashTables; // Array of Hash Tables, where it's necessary change links
     
     
     /*
@@ -82,9 +83,15 @@ class DoubleNodes {
     
     /*
      * Combine ALL double nodes
+     * 
+     * @param \Classes\Factory\Model\Table\InstanceHashTable[] $hashTables Tables, where changes to be applied
+     * 
      */
     
-    public function combineAll() {
+    public function combineAll($hashTables) {
+        // GET HASH TABLE
+        self::$hashTables = $hashTables;
+        
         // FIND
         self::find();
 //        self::servicePrint();
@@ -113,8 +120,9 @@ class DoubleNodes {
         \Classes\Factory\Model\Model::deleteInstance($uinAttach);
         
         //CHANGE HASH TABLE
-        $hashTable = \Classes\Factory\Model\Model::getHashTable();
-        $hashTable->replaceUin($uinAttach, $uinKeep);
+        foreach (self::$hashTables as $table) {
+            $table->replaceUin($uinAttach, $uinKeep);
+        }
         
 //        \Classes\Factory\Model\Model::servicePrint();
     }
