@@ -13,8 +13,8 @@ try {
     // UPLOAD STEEL MEMBERS
     Classes\Utils\Timer\Timer::start('STEEL_MEMBER_UPLOAD');
     $uploadFactory = new \Classes\Factory\Import\Instance\InstanceUploaderFromExcel();
-    $steelMemberArray = $uploadFactory->upload('./Source/Excel/Test/Frame_01.xlsx',
-//    $steelMemberArray = $uploadFactory->upload('./Source/Excel/Simple_Piperack/Steel_Members_01.xlsx',
+//    $steelMemberArray = $uploadFactory->upload('./Source/Excel/Test/Frame_01.xlsx',
+    $steelMemberArray = $uploadFactory->upload('./Source/Excel/Simple_Piperack/Steel_Members_01.xlsx',
             new \Classes\Instance\Member\SteelMember);
     
     foreach ($steelMemberArray as &$object) {
@@ -24,7 +24,7 @@ try {
    
     
     // UPLOAD RC MEMBERS
-     /*
+     
     Classes\Utils\Timer\Timer::start('RC_MEMBER_UPLOAD');
     $uploadFactory = new \Classes\Factory\Import\Instance\InstanceUploaderFromExcel();
     $rcMemberArray = $uploadFactory->upload('./Source/Excel/Simple_Piperack/RC_Members_01.xlsx',
@@ -34,7 +34,7 @@ try {
         Classes\Factory\Model\Addition\ParameterMemberAddition::add($object);
     }
     Classes\Utils\Timer\Timer::stop('RC_MEMBER_UPLOAD');
-    */
+    
     
      
     // DELETE DOUBLE NODES
@@ -50,7 +50,8 @@ try {
     
     // UPLOAD LOAD CASES
     Classes\Utils\Timer\Timer::start('LOAD_CASES_UPLOAD');
-    $loadCaseArray = $uploadFactory->upload('./Source/Excel/Test/Load_Cases_01.xlsx',
+    $loadCaseArray = $uploadFactory->upload('./Source/Excel/Simple_Piperack/Load_Cases_01.xlsx',
+//    $loadCaseArray = $uploadFactory->upload('./Source/Excel/Test/Load_Cases_01.xlsx',
             new \Classes\Instance\LoadCase\LoadCase);
     
     foreach ($loadCaseArray as $object) {
@@ -60,7 +61,8 @@ try {
     
     // UPLOAD LOADS
     Classes\Utils\Timer\Timer::start('LOADS_UPLOAD');
-    $memberLoadArray = $uploadFactory->upload('./Source/Excel/Test/Loads_01.xlsx',
+    $memberLoadArray = $uploadFactory->upload('./Source/Excel/Simple_Piperack/Loads_01.xlsx',
+//    $memberLoadArray = $uploadFactory->upload('./Source/Excel/Test/Loads_01.xlsx',
             new \Classes\Instance\Load\Member\CommonMemberLoad);
     
     $notFoundObjects = Classes\Factory\Model\Addition\MemberLoadAddition::add($memberLoadArray);
@@ -74,7 +76,8 @@ try {
     
     // UPLOAD CONSTRAINTS
     Classes\Utils\Timer\Timer::start('LOAD_CONSTRAINTS');
-    $constraintArray = $uploadFactory->upload('./Source/Excel/Test/Constraint_01.xlsx',
+    $constraintArray = $uploadFactory->upload('./Source/Excel/Simple_Piperack/Constraint_01.xlsx',
+//    $constraintArray = $uploadFactory->upload('./Source/Excel/Test/Constraint_01.xlsx',
             new \Classes\Instance\Node\Constraint);
     
     foreach ($constraintArray as $object) {

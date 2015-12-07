@@ -52,11 +52,8 @@ class MemberLoadAddition {
         }
 
         // DELETE DOUBLE NODES
-//        self::$commonMemberLoadTable->servicePrint();
         $tableArray = array(self::$hashTable, self::$commonMemberLoadTable);
         \Classes\Utils\Node\DoubleNodes::combineAll($tableArray);
-//        echo "<br/>";
-//        self::$commonMemberLoadTable->servicePrint();
         
         // SORT NODES
         \Classes\Factory\Model\Model::sortNodes();
@@ -68,7 +65,7 @@ class MemberLoadAddition {
         // Find destination for all Common Member Loads
         self::distribute();
         
-        //Return all not found loads
+        // Return all not found loads
         $notFoundObjects = array();
         foreach (self::$notFoundObjects as $uin) {
             $notFoundObjects[] = self::$commonMemberLoadArray[$uin];
@@ -229,29 +226,207 @@ class MemberLoadAddition {
                 self::getLoadProperties($commonMemberLoad);
                 
                // Check type of load
-               $type = $commonMemberLoad->getProperty('type')->get();
-               
-               if ($type == "C") {
-                   $isFound = self::addConcentratedCommonMemberLoad($node, $actualMemberUins);
-                   // if commonMemberLoad has not been found, add Uin to notFoundArray
-                   if (!$isFound) {
-                       self::$notFoundObjects[] = $loadUin;
-                   }
-                   // delete checked CommonMemberLoad from actual array
-                   unset($actualCommonMemberLoadUins[$loadUin]);
+               switch ($commonMemberLoad->getProperty('type')->get()) {
+                   case "C":
+                       $isFound = self::addConcentratedCommonMemberLoad($node, $commonMemberLoad, $actualMemberUins);
+                       
+                       // delete checked CommonMemberLoad from actual array
+                       unset($actualCommonMemberLoadUins[$loadUin]);
+                       
+                       break;
+                   
+                   case "D":
+                       $isFound = self::addDistributedCommonMemberLoad($node, $commonMemberLoad, $endNumber, $actualMemberUins);
+                       
+                       // delete checked CommonMemberLoad from actual array
+                       if ($isFound) {
+                           unset($actualCommonMemberLoadUins[$loadUin]);
+                       }
+                       
+                       break;
+                       
+                   default:
+                       break;
                }
+               
+               
                
             }
         }
     }
     
     /*
+     * Add distributed CommonMemberLoad
+     * 
+     * @param \Classes\Instance\Node\Node $node Node
+     * @param \Classes\Instance\Load\Member\CommonMemberLoad $commonMemberLoad Common Member Load
+     * @param int $commonMemberLoadEndNumber End number of Common Member Load [0 - 1st node, 1 - 2nd node]
+     * @param mixed[] $actualMemberUins Array of actual members
+     */
+    private static function addDistributedCommonMemberLoad($node, $commonMemberLoad, $commonMemberLoadEndNumber, $actualMemberUins) {
+        
+        $isFound = FALSE;
+        
+        // Get Nodes of Common Member Load
+        $loadConnections = array_keys(self::$commonMemberLoadTable->getConnection($commonMemberLoad->getUin()));
+        $loadNode1 = self::$nodes[$loadConnections[0]];
+        $loadNode2 = self::$nodes[$loadConnections[1]];
+        
+        // Prepare Load Point
+        $loadPoint1 = \Classes\Utils\AbstractInstance\Point::createFromNode($loadNode1);
+        $loadPoint2 = \Classes\Utils\AbstractInstance\Point::createFromNode($loadNode2);
+        
+        // Prepare Load Line
+        $loadLine = new \Classes\Utils\AbstractInstance\Line($loadPoint1, $loadPoint2);
+        $loadLineLength = $loadLine->length();
+        
+        // Try to find member with necessary coordinates
+         while ((list($memberUin, $memberEndNumber) = each($actualMemberUins)) && $isFound === FALSE) {
+           
+            $memberConnections = array_keys(self::$hashTable->getConnection($memberUin));
+            $memberNode1 = self::$nodes[$memberConnections[0]];
+            $memberNode2 = self::$nodes[$memberConnections[1]];
+            
+            // Prepare Node Point
+            $memberPoint1 = \Classes\Utils\AbstractInstance\Point::createFromNode($memberNode1);
+            $memberPoint2 = \Classes\Utils\AbstractInstance\Point::createFromNode($memberNode2);
+             
+            // Prepare Line
+            $memberLine = new \Classes\Utils\AbstractInstance\Line($memberPoint1, $memberPoint2);
+            
+            // Array for arrays with overlapping coordinates
+             $loadOverlap = array(); $memberOverlap = array();
+             
+             // Find overlapping of lines
+            if (\Classes\Utils\Math\Lines::findOverlappingOfTwoLines($loadLine, $memberLine, $loadOverlap, $memberOverlap)) {
+                
+                $isFound = TRUE;
+                
+                // Make new node load
+                $load = new \Classes\Instance\Load\Member\DistributedMemberLoad();
+                
+                // Get LOAD Positions
+                $loadPos1 = new \Classes\Value\FloatValue($memberOverlap[0]);
+                $loadPos2 = new \Classes\Value\FloatValue($memberOverlap[1]);
+                $load->setProperty('position1', $loadPos1);
+                $load->setProperty('position2', $loadPos2);
+                
+                // Get LOAD Values
+                $value1 = self::$value1->get();
+                $value2 = self::$value2->get();
+                $loadValue1 =  new \Classes\Value\FloatValue($value1+($value2-$value1)*$loadOverlap[0]/$loadLineLength);
+                $loadValue2 =  new \Classes\Value\FloatValue($value1+($value2-$value1)*$loadOverlap[1]/$loadLineLength);
+                
+                $isLoadAndMemberSameDirection = \Classes\Utils\Math\Lines::areTwoVectorHaveSameDirection($loadLine, $memberLine);
+                if ($isLoadAndMemberSameDirection) {
+                    $load->setProperty('value1', $loadValue1);
+                    $load->setProperty('value2', $loadValue2);
+                } else {
+                    $load->setProperty('value1', $loadValue2);
+                    $load->setProperty('value2', $loadValue1);
+                }
+                
+                // Add connection
+                self::$loadTable->setConnection($load->getUin(), $memberUin,
+                        new \Classes\Factory\Connection\LoadConnection\GlobalCoordinateSystem);
+                
+                // Add new load
+                self::setLoadProperties($load);
+                
+                $isBeginPartExist = !\Classes\Utils\Math\Constant::isNumbersEqual($loadOverlap[0], 0);
+                $isEndPartExist = !\Classes\Utils\Math\Constant::isNumbersEqual($loadOverlap[1], $loadLineLength);
+                
+                // Get Uin of member's node, which is more far from sweep line
+                switch ($memberEndNumber) {
+                    case 0: $memberEdgeUin = $memberNode2->getUin(); break;
+                    case 1: $memberEdgeUin = $memberNode1->getUin(); break;
+                }
+                
+                // Check remainig parts of $loadLine
+                // Begin part
+                if ($isBeginPartExist) {
+                    
+                    // Find end point of begin part
+                    $endPoint = \Classes\Utils\Math\Lines::getPointOnLineWithOffset($loadLine, $loadOverlap[0]);
+                    
+                    // Make new object
+                    $beginObject = clone $commonMemberLoad;
+                    
+                    //Set Properties
+                    $beginObject->setProperty('x2', new \Classes\Value\FloatValue($endPoint->x));
+                    $beginObject->setProperty('y2', new \Classes\Value\FloatValue($endPoint->y));
+                    $beginObject->setProperty('z2', new \Classes\Value\FloatValue($endPoint->z));
+                    $beginObject->setProperty('value2', $loadValue1);
+                    
+                    self::$commonMemberLoadArray[$beginObject->getUin()] = $beginObject;
+                    
+                    //If begin part is near sweep line
+                    if ($commonMemberLoadEndNumber == 0) {
+                        self::$notFoundObjects[] = $beginObject->getUin();
+                    }
+                    //If begin part is far from sweep line
+                    if ($commonMemberLoadEndNumber == 1) {
+                        // Set connection btw 1st node of CommonMemberLoad and beginObject
+                        self::$commonMemberLoadTable->setConnection($beginObject->getUin(),  $loadNode1->getUin(), self::$emptyConnection);
+                        
+                        // Set connection between end of member anв beginObject
+                        self::$commonMemberLoadTable->setConnection($beginObject->getUin(),  $memberEdgeUin, self::$emptyConnection);
+                    }
+                    
+                }
+                
+                // End part
+                if ($isEndPartExist) {
+                   
+                    // Find begin point of end part
+                    $beginPoint = \Classes\Utils\Math\Lines::getPointOnLineWithOffset($loadLine, $loadOverlap[1]);
+                    
+                    // Make new object
+                    $endObject = clone $commonMemberLoad;
+                    
+                    //Set Properties
+                    $endObject->setProperty('x1', new \Classes\Value\FloatValue($beginPoint->x));
+                    $endObject->setProperty('y1', new \Classes\Value\FloatValue($beginPoint->y));
+                    $endObject->setProperty('z1', new \Classes\Value\FloatValue($beginPoint->z));
+                    $endObject->setProperty('value1', $loadValue2);
+                    
+                    self::$commonMemberLoadArray[$endObject->getUin()] = $endObject;
+                    
+                    //If begin part is near sweep line
+                    if ($commonMemberLoadEndNumber == 0) {
+                        // Set connection between end of member anв beginObject
+                        self::$commonMemberLoadTable->setConnection($endObject->getUin(),  $memberEdgeUin, self::$emptyConnection);
+                        
+                        // Set connection btw 2nd node of CommonMemberLoad and beginObject
+                        self::$commonMemberLoadTable->setConnection($endObject->getUin(),  $loadNode2->getUin(), self::$emptyConnection);
+                    }
+                    //If begin part is far from sweep line
+                    if ($commonMemberLoadEndNumber == 1) {
+                        self::$notFoundObjects[] = $endObject->getUin();
+                    }
+                }
+                
+                // Delete Common Member Load
+                self::$commonMemberLoadTable->removeConnection($commonMemberLoad->getUin(), $loadNode1->getUin());
+                self::$commonMemberLoadTable->removeConnection($commonMemberLoad->getUin(), $loadNode2->getUin());
+                unset(self::$commonMemberLoadArray[$commonMemberLoad->getUin()]);
+                
+            }
+         }
+         
+         return $isFound;
+    }
+    
+    /*
      * Add concentrated CommonMemberLoad
      * 
      * @param \Classes\Instance\Node\Node $node Node
+     * @param \Classes\Instance\Load\Member\CommonMemberLoad $commonMemberLoad Common Member Load
      * @param mixed[] $actualMemberUins Array of actual members
+     * 
+     * @return bool Successfully founded or not
      */
-    private static function addConcentratedCommonMemberLoad($node, $actualMemberUins) {
+    private static function addConcentratedCommonMemberLoad($node, $commonMemberLoad, $actualMemberUins) {
         
         $isFound = FALSE;
         
@@ -331,6 +506,8 @@ class MemberLoadAddition {
         // If Load has been found, add properties and add to Model
         if ($isFound) {
             self::setLoadProperties($load);
+        } else {
+            self::$notFoundObjects[] = $commonMemberLoad->getUin();
         }
         
         return $isFound;
