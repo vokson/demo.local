@@ -1,112 +1,100 @@
 <script type="text/javascript" src="web/js/cds_functions.js"></script>
 
 <script type='text/javascript'>
-    $(document).ready(function() {
-        $("#search_form").submit(function(s) {
+    $(document).ready(function () {
+        $("#button_execute").click(function (s) {
             s.preventDefault();
-            search();
+            execute();
         });
 
-        $("#button_clear").click(function(s) {
-            s.preventDefault();
-            clear();
-        });
 
-        $("#button_get").click(function(s) {
-            s.preventDefault();
-            check_server();
-        });
+        function handleDrop(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            p.innerHTML = '<b>Files dropped:</b>';
+            list.innerHTML = '';
 
-        $("#button_download_all_pdf").click(function(s) {
-            s.preventDefault();
-            zip_drawings('PDF');
-        });
+            var files = e.dataTransfer.files,
+                    folder;
 
-        $("#button_download_all_dwg").click(function(s) {
-            s.preventDefault();
-            zip_drawings('DWG');
-        });
+            for (var i = 0, f; f = files[i]; i++) { // iterate in the files dropped
+                if (!f.type && f.size % 4096 == 0) {
+                    // The file is a folder
+                    folder = true;
+                } else {
+                    // The file is not a folder
+                    folder = false;
+                }
 
-        // ---- Календарь -----
-        $('input[id^="date"]').datepicker({dateFormat: 'yy-mm-dd'});
+                var x = document.createElement('li');
+                x.innerText = (folder ? 'Folder: ' : 'File: ') + f.name + (f.type ? ' (' + f.type + ')' : '') + ', ' + f.size + 'bytes';
+                list.appendChild(x);
+            }
 
-        //Начальные параметры сортировки
-        //Выделение зеброй
-        $.tablesorter.defaults.widgets = ['zebra'];
-        //Сортировка по drawing и затем по rev по умолчанию
-        $.tablesorter.defaults.sortList = [[2, 0],[3,0]];
+        }
 
-//        sort_by = 'drawing';
-//        sort_direction = 'ASC';
-        //Указатель выполняется ли запрос
-        is_search_request_in_progress = false;
-        is_zip_request_in_progress = false;
+        function handleDragOver(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy'; // say that is a copy
+        }
 
-        $("#search_results").show();
-        $("#search_results").html('Please, add search condition and press SEARCH button.<br/>');
+        function handleDragEnter(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            p.innerHTML = '<b>Dragging...</b>';
+            list.innerHTML = '';
+        }
 
-        // Проверка на администратора
-        $.post("index.php", {cmd: 'checkIP'}, function(data) {
-            if (data !== 'TRUE')
-                $("#button_get").attr('disabled', 'disabled');
-        });
+        function handleDragLeave(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            p.innerHTML = '';
+            list.innerHTML = '';
+        }
+
+        var dropZone = document.getElementById('drop_zone'),
+                list = document.getElementById('list'),
+                p = document.getElementById('info').children[0];
+
+        dropZone.addEventListener('dragenter', handleDragEnter, false);
+        dropZone.addEventListener('dragover', handleDragOver, false);
+        dropZone.addEventListener('dragleave', handleDragLeave, false);
+        dropZone.addEventListener('drop', handleDrop, false);
+
+
 
     });
 </script>
 
 <body>
 
-    <div id="check_bar" align="center"></div>    
-    <div id="get_bar" align="center"></div>  
+    <style type="text/css">
+        #drop_zone {
+            border: 2px dashed #bbb;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            padding: 25px;
+            text-align: center;
+            font-family: sans-serif;
+            font-size: 1.5em;
+            color: #bbb;
+        }
+        #info {
+            font-family: monospace;
+            font-size: 18px;
+        }
+        #list {
+            font-size: 15px;
+        }
+    </style>
 
-    <div align="center">
-        <form id="search_form" method="post" >
-            <table class="table_input_button"><tr>
-                    <!--<td class="buttons" width="3%"><input type="button" id="button_proba" value="Proba" /></td>-->
-                    <td class="td_button_get"><input type="button" class="button_style" id="button_get" value="S" title="Check server for new transmittals (only for administrator)."/></td>
-                    <td class="td_button_download_all_pdf"><input type="button" class="button_style" id="button_download_all_pdf" value="DOWNLOAD ALL FOUND PDF" title="Download all founded documents in PDF format. In case there are many documents the action may take several minutes."/></td>
-                    <td class="td_button"><input type="submit" class="button_style" value="SEARCH"/></td>
-                    <td class="td_button_download_all_dwg"><input type="button" class="button_style" id="button_download_all_dwg" value="DOWNLOAD ALL FOUND DWG" title="Download all founded documents in DWG format. In case there are many documents the action may take several minutes."/></td>
-                </tr></table>
-
-            <table class="table_input_text">
-                <tr>
-                    <td class = "td_icon">
-                        <img src="web/img/clear.jpg" width="32px" height="32px" id="button_clear" title="Clear all fields"/>
-                    </td>
-                    <td class = "td_project">
-                        <input type="text" name="project" id="project" placeholder="Project" title="Number of project. TAF is 6417" value="6417"/>
-                    </td>
-                    <td class = "td_drawing">
-                        <input type="text" name="drawing" id="drawing" placeholder="Drawing" title="Number of drawing or part of number. For example, 'C320-02-251100'."/>
-                    </td>
-                    <td class = "td_revision">
-                        <input type="text" name="revision" id="revision" placeholder="Rev" title ="Number of revision. For example, 0,1,2,3..."/>
-                        <input type="checkbox" name="only_last_rev" id="only_last_rev" title="Only last revisions" checked/>
-                    </td>
-                    <td class = "td_part">
-                        <input type="text" name="part" id="part" placeholder="Part" title="Part of document. Most of documents have only part 1."/>
-                    </td>
-                    <td class = "td_status">
-                        <input type="text" name="status" id="status" placeholder="St" title="FR - for review; FI - for information; FC - for construction; FA - for approval"/>
-                    </td>
-                    <td class = "td_title">
-                        <input type="text" name="title"  placeholder="Drawing's title" id="title" title="For example, 'mdea pump house'." />
-                    </td>
-                    <td class = "td_date">
-                        <input type="text" name="date_in_beg" id="date_in_beg"  placeholder="Start Date" title="Document has been received not early than this date."/>
-                        <input type="text" name="date_in_end" id="date_in_end"  placeholder="End Date" title="Document has been received not later than this date."/>
-                    </td>
-                    <td class = "td_transmit">
-                        <input type="text" name="transmit_in" id="transmit_in"  placeholder="Transmittal" title="Transmittal's name or part of name. For example, 'TAF-SJZ-AMM-0204-T'."/>
-                    </td>
-
-                </tr>
-
-            </table>    
-        </form>
+    <div id="drop_zone">Drop script file here</div>
+    <div id="info">
+        <p></p>
+        <ul id="list"></ul>
     </div>
-
-    <div id="search_results" align="center"></div>
+    <div id="text_area"></div>  
 
 </body>
