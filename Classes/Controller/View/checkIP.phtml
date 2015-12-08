@@ -1,0 +1,9 @@
+<?php
+//Показываем количество найденных файлов
+$is_OK = array_pop($request->getFeedback());
+
+if ($is_OK === TRUE) {
+    echo 'TRUE';
+} else {
+    echo 'FALSE';
+}

@@ -1,0 +1,1 @@
+a:3:{s:3:"dsn";s:52:"mysql:host=localhost;dbname=mhi_cds_dev;charset=utf8";s:8:"username";s:7:"mhi_cds";s:8:"password";s:7:"mhi_cds";}

@@ -16,7 +16,7 @@ namespace Classes\Utils\Math;
 class Constant {
 
     // Tolerance for double numbers comparison
-    const epsilon = 0.01;
+    public static $epsilon;
 
     /*
      * Check $a == $b or not

@@ -1,0 +1,20 @@
+<?php
+//Получаем статистику на день
+
+list($arr_by_uin, $arr_by_time) = array_pop($request->getFeedback());
+
+$arr_by_time_ajax = array();
+foreach ($arr_by_time as $time => $value) {
+    $arr_by_time_ajax[] = array('time' => $time, 'value' => $value);
+}
+
+$sum = 0;
+foreach ($arr_by_uin as $value) {
+    $sum += $value;
+}
+$arr_by_uin_ajax = array();
+foreach ($arr_by_uin as $label => $value) {
+    $arr_by_uin_ajax[] = array('value' => round($value/$sum*100), 'label' => $label);
+}
+
+echo json_encode(array($arr_by_time_ajax, $arr_by_uin_ajax, $sum));

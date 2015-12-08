@@ -1,0 +1,72 @@
+<?php
+//читаем максимальное кол-во чертежей
+$max_count = \base\ApplicationRegistry::getDrawing()['max_drw_count'];
+
+//Показываем время поиска
+echo 'Search time ' . \util\Timer::show('GLOBAL') . ' sec. ';
+
+//Показываем количество найденных файлов
+$collection = array_pop($request->getFeedback());
+
+if ($collection->count() > $max_count) {
+    echo 'Count of documents '.$collection->count().' is more than '.$max_count.'. Please, add search condition.<br/>';
+    return;
+} else {
+    echo 'Count of documents is '.$collection->count().'.<br/>';
+}
+?>
+
+<table id="doc_table"  class="tablesorter-blue">
+    <thead>
+        <tr>
+            <th class = "td_icon"/>
+            <th class = "td_project">Project </th>
+            <th class = "td_drawing">Drawing </th>
+            <th class = "td_revision" >Rev </th>
+            <th class = "td_part" >Part </th>
+            <th class = "td_status" >St </th>
+            <th class = "td_title">Title </th>
+            <th class = "td_date" >Date </th>
+            <th class = "td_transmit">Transmittal </th>
+        </tr>
+    </thead>
+    <?php
+    foreach ($collection as $doc) {
+
+        $dwgFileName = '/' . \util\Utils::storagePath() . '/' . $doc->getPath() . '/' .
+                \util\Utils::CreateDocumentNameDWG(
+                        $doc->getProject(), $doc->getDrawing(), $doc->getRevision(), $doc->getPart());
+
+        $pdfFileName = '/' . \util\Utils::storagePath() . '/' . $doc->getPath() . '/' .
+                \util\Utils::CreateDocumentNamePDF(
+                        $doc->getProject(), $doc->getDrawing(), $doc->getRevision(), $doc->getPart());
+        ?>
+        <tr>
+
+            <td class = "td_icon <?php if ($doc->getIs_DWG()) {
+        echo 'dwg';
+    } ?>" name="<?php echo $doc->getUin(); ?>">
+                <?php if ($doc->getIs_DWG()) { ?>
+                    <a href="<?php echo $dwgFileName; ?>">
+                    <?php } ?>
+                    <img src="/web/img/dwg_<?php echo ($doc->getIs_DWG() ? 'ok' : 'fail') ?>.jpg" width="24px" height="24px"/>
+                </a>
+            </td>
+            <td class = "td_project"><?php echo $doc->getProject(); ?></td>
+            <td class = "td_drawing">
+                <a href="<?php echo $pdfFileName; ?>">
+                    <?php echo $doc->getDrawing(); ?>
+                </a>
+            </td>
+            <td class = "td_revision"><?php echo $doc->getRevision(); ?></td>
+            <td class = "td_part"><?php echo $doc->getPart(); ?></td>
+            <td class = "td_status"><?php echo $doc->getStatus(); ?></td>
+            <td class = "td_title text_left"><?php echo $doc->getTitle(); ?></td>
+            <td class = "td_date"><?php echo date('Y-m-d', $doc->getDate_In()); ?></td>
+            <td class = "td_transmit"><?php echo $doc->getTransmit_In(); ?></td>
+
+
+        </tr>
+
+    <?php } ?>
+</table>
