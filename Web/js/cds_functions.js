@@ -18,11 +18,7 @@ function var_dump(obj) {
 //    $("#drawing").focus();
 //}
 
-function execute() {
-    commands = new Array;
-    $.get('http://demo.local/Source/Excel/Test/Test_Model.txt', function(data){
-        commands = data.split('\n');
-    });
+function execute(commands) {
     
     $.ajax({
         type: "POST",

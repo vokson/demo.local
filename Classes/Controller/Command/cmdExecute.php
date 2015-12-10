@@ -13,18 +13,21 @@ class cmdExecute extends Command {
         
         // Получаем переменные
         // Экранируем специальные символы
-        $commandArray = filter_input(INPUT_POST, 'commands', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        
+//        $commandArray = filter_input(INPUT_POST, 'commands', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 //        $commandArray = $request->getProperty('commands');
         
         // if Commands array is empty -> cancel
-        if (empty($commandArray)) {
-            return;
-        }
-        
+//        if (empty($commandArray)) {
+//            return;
+//        }
+        $files = $_FILES;
         // Create command resolver
         $commandResolver = new \Classes\Controller\Command\CommandResolver();
 
-        foreach ($commandArray as $command) {
+       for ($i=0; $i<count($_POST['commands']);$i++) {
+           $command = $_POST['commands'][$i];
+           
             // Check command
             $command = trim(preg_replace("/\s{2,}/", " ", $command));
             

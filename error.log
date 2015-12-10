@@ -1,1 +1,2 @@
 [Fri Nov 13 14:47:20.878668 2015] [:error] [pid 1704:tid 1692] [client 127.0.0.1:57273] script 'E:/Aleksei/Havings/Code/demo.local/testLisbox.php' not found or unable to stat
+[Tue Dec 08 21:04:01.860573 2015] [negotiation:error] [pid 2492:tid 1696] [client 127.0.0.1:50963] AH00690: no acceptable variant: D:/xampp/apache/error/HTTP_NOT_FOUND.html.var, referer: http://demo.local/
