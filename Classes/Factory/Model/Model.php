@@ -108,7 +108,7 @@ class Model {
 
         $isSorted = usort($values, function ($a, $b) {
             return \Classes\Instance\Node\Node::compare($a, $b,
-                    self::coordinateTolerance);
+                    self::$coordinateTolerance);
         });
         
         if ($isSorted) {

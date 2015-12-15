@@ -1,4 +1,4 @@
-<script type="text/javascript" src="web/js/cds_functions.js"></script>
+<script type="text/javascript" src="web/js/functions.js"></script>
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -7,70 +7,20 @@
             execute();
         });
 
-//        function handleDrop(e) {
-//            e.stopPropagation();
-//            e.preventDefault();
-//
-//            var file = e.dataTransfer.files[0];
-//            $("#text_area").text(file.name);
-//            console.log(file.name);
-//            console.log(file.type);
-//            console.log(file.size);
-//            console.log(file);
-//
-//            var reader = new FileReader();
-//            reader.onload = function (event) {
-//                data = event.target.result;
-//                var commandArray = data.split('\n');
-//                console.log(commandArray);
-//                execute(commandArray);
-//            };
-//            reader.readAsText(file, "UTF-8");
-//
-//
-//        }
-//
-//        function handleDragOver(e) {
-//            e.stopPropagation();
-//            e.preventDefault();
-//
-//            dropZone.addClass('hover');
-//        }
-//
-//        function handleDragEnter(e) {
-//            e.stopPropagation();
-//            e.preventDefault();
-//        }
-//
-//        function handleDragLeave(e) {
-//            e.stopPropagation();
-//            e.preventDefault();
-//
-//            dropZone.removeClass('hover');
-//        }
-//
-//        var dropZone = document.getElementById('drop_zone');
-//
-//        dropZone.addEventListener('dragenter', handleDragEnter, false);
-//        dropZone.addEventListener('dragover', handleDragOver, false);
-//        dropZone.addEventListener('dragleave', handleDragLeave, false);
-//        dropZone.addEventListener('drop', handleDrop, false);
-
-//        $("div#dropbox").dropzone({url: "index.php"});
         var myDropzone = new Dropzone("div#dropbox", {url: "index.php",
             parallelUploads: 100, uploadMultiple: true});
-
-//        Dropzone.options.dropbox = {
-//            init: function () {
-//                this.on('sending', function (file, xhr, formData) {
-//                    formData.append('cmd', 'Execute');
-//                });
-//            }
-//        };
 
 
         myDropzone.on('sending', function (file, xhr, formData) {
             formData.append('cmd', 'Execute');
+        });
+
+        myDropzone.on("success", function (file, data) {
+            $("#text_area").html(data);
+        });
+
+        myDropzone.on("error", function (file, data) {
+            $("#text_area").html(data);
         });
 
     });

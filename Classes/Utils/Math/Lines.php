@@ -184,7 +184,7 @@ class Lines {
         
         $length = $line->length();
         
-        if ( (0 - $offset) > Constant::epsilon || ($offset - $length) > Constant::epsilon) {
+        if ( (0 - $offset) > Constant::$epsilon || ($offset - $length) > Constant::$epsilon) {
             return FALSE;
         }
         

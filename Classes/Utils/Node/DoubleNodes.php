@@ -26,7 +26,7 @@ class DoubleNodes {
     private static function find() {
         
         self::$uins = array();
-        $precision = round (log10(1/\Classes\Factory\Model\Model::coordinateTolerance));
+        $precision = round (log10(1/\Classes\Factory\Model\Model::$coordinateTolerance));
         
        // Check all nodes
         $nodes = \Classes\Factory\Model\Model::getNodes();

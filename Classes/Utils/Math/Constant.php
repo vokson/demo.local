@@ -28,7 +28,7 @@ class Constant {
      */
 
     public static function isNumbersEqual($a, $b) {
-        if (abs($a - $b) < self::epsilon) {
+        if (abs($a - $b) < self::$epsilon) {
             return TRUE;
         }
 
@@ -107,11 +107,11 @@ class Constant {
      */
     static function stringValue($value, $precision) {
         if ($value > 0) {
-            $intPart = floor($value/\Classes\Factory\Model\Model::coordinateTolerance);
+            $intPart = floor($value/\Classes\Factory\Model\Model::$coordinateTolerance);
         } else {
-            $intPart = ceil($value/\Classes\Factory\Model\Model::coordinateTolerance);
+            $intPart = ceil($value/\Classes\Factory\Model\Model::$coordinateTolerance);
         }
         
-        return sprintf("%." . $precision . "f", $intPart * \Classes\Factory\Model\Model::coordinateTolerance);
+        return sprintf("%." . $precision . "f", $intPart * \Classes\Factory\Model\Model::$coordinateTolerance);
     }
 }

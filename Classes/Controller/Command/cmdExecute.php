@@ -9,51 +9,140 @@ namespace Classes\Controller\Command;
  */
 class cmdExecute extends Command {
 
+
     function doExecute(\Classes\Controller\Controller\Request $request) {
+        try {
+            // Check command file
+            $filename = $this->getTempFileName("constructor.xlsx");
+
+            if ($filename !== FALSE) {
+                // Upload command file
+                $uploadFactory = new \Classes\Factory\Import\Instance\InstanceUploaderFromExcel();
+                $objectArray = $uploadFactory->upload($filename, new \Classes\Instance\Command\Command);
+
+                foreach ($objectArray as &$object) {
+                    $this->doCommand($object);
+                }
+            }
+        } catch (Exception $e) {
+            $request->addFeedback("Exception: " . $e->getMessage() . "</br>");
+            include \util\Utils::createViewName('execute');
+        }
         
-        // Получаем переменные
-        // Экранируем специальные символы
+        $this->servicePrint();
+    }
+    
+    /*
+     * Print service information
+     */
+    
+    private function servicePrint() {
+         // Create command resolver
+        $commandResolver = new \Classes\Controller\Command\CommandResolver();
+        // Create command request
+        $commandRequest = new \Classes\Controller\Controller\Request();
         
-//        $commandArray = filter_input(INPUT_POST, 'commands', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-//        $commandArray = $request->getProperty('commands');
+        $commandRequest->setProperty('cmd', 'ServicePrint');
         
-        // if Commands array is empty -> cancel
-//        if (empty($commandArray)) {
-//            return;
-//        }
-        $files = $_FILES;
+        $cmd = $commandResolver->getCommand($commandRequest);
+        $cmd->execute($commandRequest);
+    }
+
+    /*
+     * Get filename of temporary file on server side
+     * 
+     * @param string $name Original filename
+     * 
+     * @return string Temporary filename
+     * @return bool FALSE if not found
+     */
+
+    private function getTempFileName($name) {
+        // Get index in files array, where file is stored
+        $index = array_search($name, $_FILES['file']['name']);
+
+        // If there isn't file in files
+        if ($index === FALSE) {
+            throw new \Classes\Controller\Exception\FileNotFoundException("File $name is NOT found.");
+        } else {
+            // Read command file. Get temp filename
+            return $_FILES['file']['tmp_name'][$index];
+        }
+    }
+
+    /*
+     * Execute command
+     * 
+     * @param \Classes\Instance\Command\Command $object Command Object
+     */
+
+    private function doCommand($cmdObject) {
         // Create command resolver
         $commandResolver = new \Classes\Controller\Command\CommandResolver();
+        // Create command request
+        $commandRequest = new \Classes\Controller\Controller\Request();
 
-       for ($i=0; $i<count($_POST['commands']);$i++) {
-           $command = $_POST['commands'][$i];
-           
-            // Check command
-            $command = trim(preg_replace("/\s{2,}/", " ", $command));
-            
-            // Create command request
-            $commandRequest = new \Classes\Controller\Controller\Request();
-            
-            if ($command == "COMBINE DOUBLE NODES") {
-                $commandRequest->setProperty('cmd', 'CombineDoubleNodes');
-            }
-            
-            if ($command == "DIVIDE ALL MEMBERS BY EXISTING NODES") {
-                $commandRequest->setProperty('cmd', 'DivideAllMemberByExistingNodes');
-            }
-            
-            if (preg_match('/IMPORT\s+STEEL\s+MEMBERS\s+FROM\s+"(?P<filename>.*)"/i', $command, $matches)) {
-                $commandRequest->setProperty('cmd', 'ImportSteelMembers');
-                $commandRequest->setProperty('filename', $matches['filename']);
-            }
-            
-            $cmd = $commandResolver->getCommand($commandRequest);
-            $cmd->execute($commandRequest);
+        $command = trim($cmdObject->getProperty('command')->get());
+        $object = trim($cmdObject->getProperty('object')->get());
+
+        // Try to find command
+        if ($command == "COMBINE" && $object == "DOUBLE NODES") {
+            $commandRequest->setProperty('cmd', 'CombineDoubleNodes');
         }
 
-             
-//            $request->addFeedback($collection);
-//            include \util\Utils::createViewName('find');
+        if ($command == "DIVIDE" && $object == "ALL MEMBERS") {
+            $commandRequest->setProperty('cmd', 'DivideAllMemberByExistingNodes');
+        }
+
+        if ($command == "IMPORT" || $command == "EXPORT") {
+            $format = trim($cmdObject->getProperty('format')->get());
+            $file = trim($cmdObject->getProperty('file')->get());
+        }
+        
+        if ($command == "IMPORT" && $format == "EXCEL") {
+           // Check filename
+            $filename = $this->getTempFileName($file);
+            if ($filename === FALSE) {
+                return;
+            } else {
+                $commandRequest->setProperty('filename', $filename);
+            } 
+        
+            if ($object == "STEEL MEMBER") {
+                $commandRequest->setProperty('cmd', 'ImportSteelMembersFromExcel');
+            }
+
+            if ($object == "PARAMETER MEMBER") {
+                $commandRequest->setProperty('cmd', 'ImportParameterMembersFromExcel');
+            }
+
+            if ($object == "CONSTRAINT") {
+                $commandRequest->setProperty('cmd', 'ImportConstraintsFromExcel');
+            }
+
+            if ($object == "LOAD CASE") {
+                $commandRequest->setProperty('cmd', 'ImportLoadCasesFromExcel');
+            }
+
+            if ($object == "COMMON MEMBER LOAD") {
+                $commandRequest->setProperty('cmd', 'ImportCommonMemberLoadsFromExcel');
+            }
+        }
+        
+        if ($command == "EXPORT" ) {
+            $commandRequest->setProperty('filename', $file);
+            
+            if ($object == "MODEL" && $format == "SCAD21") {
+                $commandRequest->setProperty('cmd', 'ExportModelToScad21');
+            }
+        }
+        
+        if (is_null($commandRequest->getProperty('cmd'))) {
+            throw new \Classes\Controller\Exception\CommandNotFoundException("Command *" . $cmdObject->servicePrint() . "* is NOT found.");
+        }
+
+        $cmd = $commandResolver->getCommand($commandRequest);
+        $cmd->execute($commandRequest);
     }
 
 }

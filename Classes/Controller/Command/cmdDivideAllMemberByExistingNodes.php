@@ -15,6 +15,9 @@ class cmdDivideAllMemberByExistingNodes extends Command {
         \Classes\Utils\Member\DivideMember::divideAllMembersByExistingNodes();
         
         \Classes\Utils\Timer\Timer::stop('DIVIDE_ALL_MEMBERS');
+        
+        $request->addFeedback(\Classes\Utils\Timer\Timer::show('DIVIDE_ALL_MEMBERS'));
+        include \Classes\Controller\Util\Utils::createViewName('divideAllMemberByExistingNodes');
     }
 
 }

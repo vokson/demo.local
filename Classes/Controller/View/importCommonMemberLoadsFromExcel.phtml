@@ -1,0 +1,15 @@
+<?php
+
+$feedback = $request->getFeedback();
+
+$time = array_pop($feedback);
+
+echo "LOADS UPLOAD COMPLETE - $time sec.<br/>";
+
+$notFoundObjects = array_pop($feedback);
+
+foreach ($notFoundObjects as $object) {
+    $name = $object->getProperty('name')->get();
+    echo "LOAD $name IS NOT FOUND<br/>";
+}
+echo "<br/>";
