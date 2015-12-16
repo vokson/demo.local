@@ -25,6 +25,15 @@ final class Utils {
     public static function configPath() {
         return realpath(__DIR__ . "/../../../Config/config.ini");
     }
+    
+     /**
+     * Return path to TEMP folder
+     * 
+     * @return string
+     */
+    public static function tempPath() {
+        return "Temp";
+    }
 
     /**
      * Usefull method to check statement and throw exception

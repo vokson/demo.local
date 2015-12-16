@@ -14,13 +14,15 @@ class cmdExportModelToScad21 extends Command {
 
         // Получаем переменные
         $filename = $request->getProperty('filename');
+        $path = \Classes\Controller\Util\Utils::tempPath() 
+                . DIRECTORY_SEPARATOR . $filename;
 
         // NUMERATION
         \Classes\Utils\Member\Numeration::numerateFromOne();
         \Classes\Utils\Node\Numeration::numerateFromOne();
 
         // EXPORT
-        \Classes\Factory\Export\Scad21ExportFactory::export($filename);
+        \Classes\Factory\Export\Scad21ExportFactory::export($path);
 
         \Classes\Utils\Timer\Timer::stop('MODEL_EXPORT');
 
@@ -29,7 +31,3 @@ class cmdExportModelToScad21 extends Command {
     }
 
 }
-//// FINISH
-//        header("Content-Disposition: attachment; filename=$filename");
-//        header("Content-Type: application/octet-stream");
-//        echo implode("\r\n", self::$txt);

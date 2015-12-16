@@ -9,8 +9,10 @@ namespace Classes\Controller\Command;
  */
 class cmdExecute extends Command {
 
-
     function doExecute(\Classes\Controller\Controller\Request $request) {
+        // Delete temp files
+        $this->deleteAllFilesFromTempFolder();
+        
         try {
             // Check command file
             $filename = $this->getTempFileName("constructor.xlsx");
@@ -28,22 +30,22 @@ class cmdExecute extends Command {
             $request->addFeedback("Exception: " . $e->getMessage() . "</br>");
             include \util\Utils::createViewName('execute');
         }
-        
+
         $this->servicePrint();
     }
-    
+
     /*
      * Print service information
      */
-    
+
     private function servicePrint() {
-         // Create command resolver
+        // Create command resolver
         $commandResolver = new \Classes\Controller\Command\CommandResolver();
         // Create command request
         $commandRequest = new \Classes\Controller\Controller\Request();
-        
+
         $commandRequest->setProperty('cmd', 'ServicePrint');
-        
+
         $cmd = $commandResolver->getCommand($commandRequest);
         $cmd->execute($commandRequest);
     }
@@ -98,16 +100,16 @@ class cmdExecute extends Command {
             $format = trim($cmdObject->getProperty('format')->get());
             $file = trim($cmdObject->getProperty('file')->get());
         }
-        
+
         if ($command == "IMPORT" && $format == "EXCEL") {
-           // Check filename
+            // Check filename
             $filename = $this->getTempFileName($file);
             if ($filename === FALSE) {
                 return;
             } else {
                 $commandRequest->setProperty('filename', $filename);
-            } 
-        
+            }
+
             if ($object == "STEEL MEMBER") {
                 $commandRequest->setProperty('cmd', 'ImportSteelMembersFromExcel');
             }
@@ -128,21 +130,35 @@ class cmdExecute extends Command {
                 $commandRequest->setProperty('cmd', 'ImportCommonMemberLoadsFromExcel');
             }
         }
-        
-        if ($command == "EXPORT" ) {
+
+        if ($command == "EXPORT") {
             $commandRequest->setProperty('filename', $file);
-            
+
             if ($object == "MODEL" && $format == "SCAD21") {
                 $commandRequest->setProperty('cmd', 'ExportModelToScad21');
             }
         }
-        
+
         if (is_null($commandRequest->getProperty('cmd'))) {
             throw new \Classes\Controller\Exception\CommandNotFoundException("Command *" . $cmdObject->servicePrint() . "* is NOT found.");
         }
 
         $cmd = $commandResolver->getCommand($commandRequest);
         $cmd->execute($commandRequest);
+    }
+
+    /*
+     * Delete all files from Temp Folder
+     */
+    private function deleteAllFilesFromTempFolder() {
+        // get all file names
+        $files = glob(\Classes\Controller\Util\Utils::tempPath() . DIRECTORY_SEPARATOR . '*'); 
+        foreach ($files as $file) { // iterate files
+            // delete file
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
     }
 
 }

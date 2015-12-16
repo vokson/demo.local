@@ -52,6 +52,7 @@ class Scad21ExportFactory extends ExportFactory {
         self::$txt[] =  '};';
         
         file_put_contents($path, implode("\r\n", self::$txt));
+        file_put_contents($path."1", implode("\r\n", self::$txt));
     }
     
     /*

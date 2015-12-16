@@ -2,10 +2,7 @@
 
 <script type='text/javascript'>
     $(document).ready(function () {
-        $("#button_execute").click(function (s) {
-            s.preventDefault();
-            execute();
-        });
+        download();
 
         var myDropzone = new Dropzone("div#dropbox", {url: "index.php",
             parallelUploads: 100, uploadMultiple: true});
@@ -15,8 +12,9 @@
             formData.append('cmd', 'Execute');
         });
 
-        myDropzone.on("success", function (file, data) {
+        myDropzone.on("successmultiple", function (file, data) {
             $("#text_area").html(data);
+            download();
         });
 
         myDropzone.on("error", function (file, data) {
