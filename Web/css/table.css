@@ -1,50 +1,64 @@
-table {
+#commandTable table {
 font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 font-size: 14px;
 border-radius: 10px;
 border-spacing: 0;
 text-align: center;
+width: 100%;
 }
-th {
+#commandTable th {
 background: #BCEBDD;
 color: white;
 text-shadow: 0 1px 1px #2D2020;
 padding: 10px 20px;
 }
-th, td {
+#commandTable th, #commandTable td {
 border-style: solid;
 border-width: 0 1px 1px 0;
 border-color: white;
 }
-th:first-child, td:first-child {
+#commandTable th:first-child, #commandTable td:first-child {
 text-align: left;
 }
-th:first-child {
+#commandTable th:first-child {
 border-top-left-radius: 10px;
 }
-th:last-child {
+#commandTable th:last-child {
 border-top-right-radius: 10px;
 border-right: none;
 }
-td {
+#commandTable td {
 padding: 10px 20px;
 }
-tr:last-child td:first-child {
+#commandTable tr:last-child td:first-child {
 border-radius: 0 0 0 10px;
 }
-tr:last-child td:last-child {
+#commandTable tr:last-child td:last-child {
 border-radius: 0 0 10px 0;
 }
-tr td:last-child {
+#commandTable tr td:last-child {
 border-right: none;
 }
-tr.ready {
+#commandTable tr.ready {
   background: #98FB98;
 }
-tr {
+#commandTable tr {
   background: #F08080;
 }
-td.complete {
+#commandTable td.complete {
   background: #FFFFFF;
   color: green;
+}
+
+#commandTable td.fail {
+  color: red;
+}
+
+td.commandCell {
+  width: 700px;
+  vertical-align: top;
+}
+
+td.resultCell {
+   vertical-align: top;
 }

@@ -15,6 +15,10 @@ class cmdUploadExcelConstructorFile extends Command {
         
         // Получаем переменные
         $originName = $request->getProperty('filename');
+        $folderName = $request->getProperty('timestamp');
+        
+        // Create new folder in TEMP
+        $this->makeTempFolder($folderName);
 
         // Check command file
         $tempName = NULL;
@@ -50,5 +54,14 @@ class cmdUploadExcelConstructorFile extends Command {
         }
 
         include \Classes\Controller\Util\Utils::createViewName('uploadExcelConstructorFile');
+    }
+    
+    /*
+     * Make temp folder
+     * 
+     * @param string $folderName Name of folder
+     */
+    private function makeTempFolder($folderName) {
+        mkdir(\Classes\Controller\Util\Utils::tempPath() . '/' . $folderName);
     }
 }

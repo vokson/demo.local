@@ -5,27 +5,63 @@
     $(document).ready(function () {
 
         constructorFileName = "constructor.xlsx";
+        timeStamp = Date.now();
+        isConstructorUploaded = false;
+        currentCommandNumber = 0;
+//        isCommandTableReady = false;
 
-        var myDropzone = new Dropzone("div#dropbox", {url: "index.php",
-            parallelUploads: 100, uploadMultiple: true});
-
-
-        myDropzone.on('sending', function (file, xhr, formData) {
-            if (file.name === constructorFileName) {
-                formData.append('cmd', 'UploadExcelConstructorFile');
-                formData.append('filename', constructorFileName);
+        // Set execute button in DISABLE mode
+//        $.("div.executeButton").disabled = false;
+        $("div.executeButton").click(function () {
+            if (isCommandTableReady()) {
+                $("td.complete").html('');
+                 executeCommands();
             }
         });
 
+        // Disable auto discover for all elements:
+        Dropzone.autoDiscover = false;
+
+        // Create Dropzone element
+        var myDropzone = new Dropzone("div#dropbox", {url: "index.php",
+            parallelUploads: 1, uploadMultiple: true});
+
+        // Send files to sever
+        myDropzone.on('sending', function (file, xhr, formData) {
+
+            if (file.name === constructorFileName && isConstructorUploaded === false) {
+                // Send constructor script
+                formData.append('cmd', 'UploadExcelConstructorFile');
+            } else {
+                // Send other files
+                formData.append('cmd', 'UploadImportFile');
+            }
+
+            formData.append('filename', file.name);
+            formData.append('timestamp', timeStamp);
+        });
+
+        // Receive feedback
         myDropzone.on("successmultiple", function (file, data) {
             console.log(data);
             var feedback = jQuery.parseJSON(data);
             var command = feedback[0];
 
+            // Feedback after constructor' upload
             if (command === 'UploadExcelConstructorFile') {
                 cleanCommandTable();
                 for (var i = 1; i < feedback.length; i++) {
                     addNewCommandToTable(feedback[i]);
+                }
+                isConstructorUploaded = true;
+            }
+
+            // Feedback after upload of other import files
+            if (command === 'UploadImportFile') {
+                var result = feedback[1];
+                console.log(file[0]);
+                if (result === true) {
+                    updateCommandTable(file[0].name);
                 }
             }
         });
@@ -51,63 +87,26 @@
             font-size: 1.5em;
             color: #bbb;
         }
-        #info {
-            font-family: monospace;
-            font-size: 18px;
-        }
-        #list {
-            font-size: 15px;
-        }
     </style>
 
-    <table id="commandTable">
+    <table>
         <tr>
-            <th>Command</th>
-            <th>Object</th>
-            <th>Format</th>
-            <th>File</th>
-        </tr>
-        <tr class="ready">
-            <td>Microsoft</td>
-            <td>20.3</td>
-            <td>30.5</td>
-            <td>23.5</td>
-            <td class="complete">40.3</td>
-        </tr>
-        <tr>
-            <td>Google</td>
-            <td>50.2</td>
-            <td>40.63</td>
-            <td>45.23</td>
-            <td>39.3</td>
-        </tr>
-        <tr>
-            <td>Apple</td>
-            <td>25.4</td>
-            <td>30.2</td>
-            <td>33.3</td>
-            <td>36.7</td>
-        </tr>
-        <tr>
-            <td>IBM</td>
-            <td>20.4</td>
-            <td>15.6</td>
-            <td>22.3</td>
-            <td>29.3</td>
+            <td class="commandCell">
+                <div class="executeButton">EXECUTE</div>
+                <table id="commandTable">
+                    <tr>
+                        <th>Command</th>
+                        <th>Object</th>
+                        <th>Format</th>
+                        <th>File</th>
+                    </tr>
+                </table>
+            </td>
+            <td class="resultCell">
+                <div id="dropbox" class="dropzone"></div>
+                <div id="text_area"></div>  
+            </td>
         </tr>
     </table>
-
-    <!--    <div >
-            <ol class="rounded">
-                <li><a>Элемент списка</a><a>Элемент списка1</a></li>
-                <li><a>Элемент списка</a></li>
-                <li><a>Элемент списка</a></li>
-                <li><a>Элемент списка</a></li>
-                <li><a>Элемент списка</a></li>
-            </ol></div>-->
-
-    <div id="dropbox">Dropzone Script</div>
-
-    <div id="text_area"></div>  
 
 </body>
