@@ -211,7 +211,7 @@ class MemberLoadAddition {
         $actualCommonMemberLoadUins = array();
 
         foreach (self::$nodes as $node) {
-            $node->servicePrint();
+//            $node->servicePrint();
             
             //Change arrays of actual elements
             self::changeActualArray($actualMemberUins, $node, self::$hashTable);

@@ -1,20 +1,33 @@
 <script type="text/javascript" src="web/js/functions.js"></script>
+<script type="text/javascript" src="web/js/tableOperations.js"></script>
 
 <script type='text/javascript'>
     $(document).ready(function () {
-        download();
+
+        constructorFileName = "constructor.xlsx";
 
         var myDropzone = new Dropzone("div#dropbox", {url: "index.php",
             parallelUploads: 100, uploadMultiple: true});
 
 
         myDropzone.on('sending', function (file, xhr, formData) {
-            formData.append('cmd', 'Execute');
+            if (file.name === constructorFileName) {
+                formData.append('cmd', 'UploadExcelConstructorFile');
+                formData.append('filename', constructorFileName);
+            }
         });
 
         myDropzone.on("successmultiple", function (file, data) {
-            $("#text_area").html(data);
-            download();
+            console.log(data);
+            var feedback = jQuery.parseJSON(data);
+            var command = feedback[0];
+
+            if (command === 'UploadExcelConstructorFile') {
+                cleanCommandTable();
+                for (var i = 1; i < feedback.length; i++) {
+                    addNewCommandToTable(feedback[i]);
+                }
+            }
         });
 
         myDropzone.on("error", function (file, data) {
@@ -27,7 +40,7 @@
 <body>
 
     <style type="text/css">
-        #drop_zone, #dropbox {
+        #dropbox {
             border: 2px dashed #bbb;
             -moz-border-radius: 5px;
             -webkit-border-radius: 5px;
@@ -47,13 +60,54 @@
         }
     </style>
 
-    <div id="drop_zone">Drop script file here</div>
+    <table id="commandTable">
+        <tr>
+            <th>Command</th>
+            <th>Object</th>
+            <th>Format</th>
+            <th>File</th>
+        </tr>
+        <tr class="ready">
+            <td>Microsoft</td>
+            <td>20.3</td>
+            <td>30.5</td>
+            <td>23.5</td>
+            <td class="complete">40.3</td>
+        </tr>
+        <tr>
+            <td>Google</td>
+            <td>50.2</td>
+            <td>40.63</td>
+            <td>45.23</td>
+            <td>39.3</td>
+        </tr>
+        <tr>
+            <td>Apple</td>
+            <td>25.4</td>
+            <td>30.2</td>
+            <td>33.3</td>
+            <td>36.7</td>
+        </tr>
+        <tr>
+            <td>IBM</td>
+            <td>20.4</td>
+            <td>15.6</td>
+            <td>22.3</td>
+            <td>29.3</td>
+        </tr>
+    </table>
+
+    <!--    <div >
+            <ol class="rounded">
+                <li><a>Элемент списка</a><a>Элемент списка1</a></li>
+                <li><a>Элемент списка</a></li>
+                <li><a>Элемент списка</a></li>
+                <li><a>Элемент списка</a></li>
+                <li><a>Элемент списка</a></li>
+            </ol></div>-->
+
     <div id="dropbox">Dropzone Script</div>
 
-    <div id="info">
-        <p></p>
-        <ul id="list"></ul>
-    </div>
     <div id="text_area"></div>  
 
 </body>
