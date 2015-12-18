@@ -27,7 +27,7 @@ class InstanceUploaderFromExcel extends InstanceUploader {
         //Read Excel file
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
         $sheetData = $objPHPExcel->getActiveSheet()->toArray();
-        
+
         //Prepare return array
         $array = array();
 
@@ -45,7 +45,7 @@ class InstanceUploaderFromExcel extends InstanceUploader {
                 $instance = new $className;
                 // Cycle for all properties    
                 for ($col = 0; $col < count($sheetData[$row]); $col++) {
-                    
+
                     // Header cell must NOT be empty
                     if (!is_null($sheetData[0][$col])) {
                         // If current cell IS NULL (empty) change to ""
@@ -60,7 +60,7 @@ class InstanceUploaderFromExcel extends InstanceUploader {
                         if ($instance->validateProperty($name, $propertyClass)) {
                             // Set property
                             try {
-                                
+
                                 $instance->setProperty($name, new $propertyClass($value));
                             } catch (Exception $e) {
                                 echo "Exception: " . $e->getMessage() . "</br>";
@@ -73,7 +73,7 @@ class InstanceUploaderFromExcel extends InstanceUploader {
                 $array[] = $instance;
             }
         }
-        
+
         return $array;
     }
 
