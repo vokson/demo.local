@@ -145,5 +145,4 @@ abstract class Instance implements Interfaces\PropertyNameValidator {
         return TRUE;
     }
     
-    
 }

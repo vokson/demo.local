@@ -43,19 +43,38 @@ class InstanceUploaderFromExcel extends InstanceUploader {
             if ($sheetData[$row][0] != "*") {
                 //Create new object
                 $instance = new $className;
-                // Cycle for all properties    
+                // Cycle for all properties  
+                $isRowOK = TRUE; // Flag for current row
                 for ($col = 0; $col < count($sheetData[$row]); $col++) {
 
                     // Header cell must NOT be empty
                     if (!is_null($sheetData[0][$col])) {
-                        // If current cell IS NULL (empty) change to ""
-                        if (is_null($sheetData[$row][$col])) {
-                            $sheetData[$row][$col] = "";
-                        }
-                        $name = $sheetData[0][$col];
-                        $value = $sheetData[$row][$col];
-//                        echo "[" . $row . "][" . $col . "] Name = " . $name . "  Value = " . $value . "<br/>";
 
+                        // Get Name
+                        $name = $sheetData[0][$col];
+
+                        // Check if property is mandatory
+                        $isNameMandatory = FALSE;
+                        if ($name[strlen($name) - 1] == '*') {
+//                            echo "[$row] $name is MANDATORY<br/>";
+                            $isNameMandatory = TRUE;
+                            $name = substr($name, 0, -1);
+                        }
+
+                        // Get Value
+                        $value = $sheetData[$row][$col];
+
+                        // Check Value
+                        if ($isNameMandatory && is_null($value)) {
+                            $isRowOK = FALSE;
+                        }
+
+                        // If current cell IS NULL (empty) change to ""
+                        if (is_null($value)) {
+                            $value = '';
+                        }
+//                        echo "[" . $row . "][" . $col . "] Name = " . $name . "  Value = " . $value . "<br/>";
+//                        
                         // Property name validation
                         if ($instance->validateProperty($name, $propertyClass)) {
                             // Set property
@@ -70,7 +89,11 @@ class InstanceUploaderFromExcel extends InstanceUploader {
                 }
 
                 // Add object to array
-                $array[] = $instance;
+                if ($isRowOK) {
+                    $array[] = $instance;
+                } else {
+                    echo basename($path) . " [" . ($row + 1) . "] Row is NOT correct<br/>";
+                }
             }
         }
 

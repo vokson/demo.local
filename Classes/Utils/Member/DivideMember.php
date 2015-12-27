@@ -134,6 +134,7 @@ class DivideMember {
             
             // Divide $actualMemberUins by $node
             foreach ($actualMemberUins as $memberUin => $endNumber) {
+//                var_dump($actualMemberUins);
                 
                 // Get coordinates of members' ends
                 $memberEndUins = array_keys($hashTable->getConnection($memberUin));
