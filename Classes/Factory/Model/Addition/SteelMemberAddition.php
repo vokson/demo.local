@@ -59,5 +59,25 @@ class SteelMemberAddition {
         
         $hashTable->setConnection($node1->getUin(), $member->getUin(), $pin1);
         $hashTable->setConnection($node2->getUin(), $member->getUin(), $pin2);
+        
+        // MAKE CHECK GROUP FOR STEEL MEMBER
+        $group = new \Classes\Instance\Group\SteelMember\SteelMemberCheckGroup();
+        $group->setProperty('steel',$object->getProperty('steel'));
+        $group->setProperty('Ry',$object->getProperty('Ry'));
+        $group->setProperty('muXZ',$object->getProperty('muXZ'));
+        $group->setProperty('muXY',$object->getProperty('muXY'));
+        $group->setProperty('gammaC',$object->getProperty('gammaC'));
+        $group->setProperty('FC',$object->getProperty('FC'));
+        $group->setProperty('name',$object->getProperty('name'));
+        
+        // CREATE LISTBOX
+        $memberList = new \Classes\Listbox\Listbox(\Classes\Factory\Model\Model::getMemberActionCollection());
+        $memberList->add($member->getUin());
+        
+        // ADD LISTBOX TO GROUP
+        $group->setProperty('listbox',$memberList);
+        
+        // ADD GROUP TO MODEL
+         \Classes\Factory\Model\Model::addInstance($group);
     }
 }

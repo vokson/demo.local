@@ -73,6 +73,7 @@ namespace Classes\Utils\Section\Steel\Russian;
              "70SH2" => "STZ RUSSIAN p_wide_h 23",
              "70SH3" => "STZ RUSSIAN p_wide_h 24",
              "70SH4" => "STZ RUSSIAN p_wide_h 25",
+             "70SH5" => "STZ RUSSIAN p_wide_h 26",
              
              "20K1" => "STZ RUSSIAN p_col_k 1",
              "20K2" => "STZ RUSSIAN p_col_k 2",

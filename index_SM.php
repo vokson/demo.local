@@ -80,6 +80,8 @@ try {
     
     // WRITE C++ FILE
     Classes\Factory\Export\Scad21ExportFactory::export("Model.cpp");
+    // WRITE JSON FILE
+    Classes\Factory\Export\JSONExportFactory::export("Model.json");
     
 } catch (Exception $e) {
     echo "Exception: " . $e->getMessage() . "</br>";

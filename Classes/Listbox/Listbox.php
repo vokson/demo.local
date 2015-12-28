@@ -130,7 +130,13 @@ class Listbox {
         if (!$action instanceof Action\ListboxAction) {
             return FALSE;
         }
+        
+        // Check if action to be applied to current listbox
+        if (!isset($this->array[$action->getTarget()])) {
+            return TRUE;
+        }
 
+        // Apply action
         return $action->apply($this);
     }
 

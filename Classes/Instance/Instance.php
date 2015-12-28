@@ -96,11 +96,13 @@ abstract class Instance implements Interfaces\PropertyNameValidator {
         
         $this->validatePropertyNameType($propertyName);
         
-        if (!$this->validateProperty($propertyName)) {
+        $className = '';
+        
+        if (!$this->validateProperty($propertyName, $className)) {
             throw new \Classes\Exception\Instance\InvalidPropertyNameException ('Property Name does NOT exist');
         }
         
-        if (!($value instanceof \Classes\Value\Value)) {
+        if (!($value instanceof $className)) {
             throw new \Classes\Exception\Instance\InvalidArgumentException ('Invalid Value argument');
         }
         

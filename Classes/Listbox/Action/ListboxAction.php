@@ -23,6 +23,16 @@ abstract class ListboxAction {
    }
    
    /*
+    * Get Target Element
+    * 
+    * @return string
+    * @return int
+    */
+   public function getTarget() {
+       return $this->applyToElement;
+   }
+   
+   /*
     * Perform action to array
     * 
     * @param mixed[] $array Array of elements

@@ -16,6 +16,7 @@ class Model {
     private static $members = array(); // Collection of rod members in model
     private static $loads = array(); // Collection of loads in model
     private static $loadCases = array(); // Collection of load cases
+    private static $steelMemberCheckGroups = array(); // Collection of group for steel member check
     private static $hashTable; // Table of connection btw instances;
     private static $restraintTable; // Table of restraints;
     private static $loadTable; // Table of loads;
@@ -47,6 +48,10 @@ class Model {
         // LOAD CASE
         if ($object instanceof \Classes\Instance\LoadCase\LoadCase) {
             self::$loadCases[$uin] = $object;
+        }
+        // STEEL MEMBER CHECK GROUP
+        if ($object instanceof \Classes\Instance\Group\SteelMember\SteelMemberCheckGroup) {
+            self::$steelMemberCheckGroups[$uin] = $object;
         }
     }
     
@@ -83,6 +88,12 @@ class Model {
         // LOAD CASE
         if (isset(self::$loadCases[$uin])) {
             unset(self::$loadCases[$uin]);
+            return TRUE;
+        }
+        
+        // STEEL MEMBER CHECK GROUP
+        if (isset(self::$steelMemberCheckGroups[$uin])) {
+            unset(self::$steelMemberCheckGroups[$uin]);
             return TRUE;
         }
         
@@ -146,6 +157,15 @@ class Model {
      */
     public static function &getLoads() {
         return self::$loads;
+    }
+    
+    /*
+     * Get steel member check groups
+     * 
+     * @return \Classes\Instance\Group\SteelMember\SteelMemberCheckGroup[] Array of groups
+     */
+    public static function &getSteelMemberCheckGroups() {
+        return self::$steelMemberCheckGroups;
     }
     
     /*
@@ -238,6 +258,12 @@ class Model {
         
         echo "+++ LOADS +++<br/>";
         foreach (self::$loads as $object) {
+            $object->servicePrint();
+        }
+        echo "<br/>";
+        
+        echo "+++ STEEL MEMBER CHECK GROUPS +++<br/>";
+        foreach (self::$steelMemberCheckGroups as $object) {
             $object->servicePrint();
         }
         echo "<br/>";

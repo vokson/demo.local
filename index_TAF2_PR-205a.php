@@ -20,6 +20,16 @@ try {
     foreach ($steelMemberArray as &$object) {
         Classes\Factory\Model\Addition\SteelMemberAddition::add($object);
     }
+     
+     // UPLOAD NEW STEEL MEMBERS
+    $uploadFactory = new \Classes\Factory\Import\Instance\InstanceUploaderFromExcel();
+    $steelMemberArray = $uploadFactory->upload('./Source/Excel/TAF2_PR-205a/PR-205a_SM_new.xlsx',
+            new \Classes\Instance\Member\SteelMember);
+    
+    
+    foreach ($steelMemberArray as &$object) {
+        Classes\Factory\Model\Addition\SteelMemberAddition::add($object);
+    }
      Classes\Utils\Timer\Timer::stop('STEEL_MEMBER_UPLOAD');
    
     // UPLOAD RC MEMBERS
@@ -69,9 +79,20 @@ try {
     }
     echo "<br/>";
     
-    // UPLOAD LOADS
+    // UPLOAD WIND LOADS
     Classes\Utils\Timer\Timer::start('LOADS_UPLOAD');
     $memberLoadArray = $uploadFactory->upload('./Source/Excel/TAF2_PR-205a/PR-205a_Wind_Load.xlsx',
+            new \Classes\Instance\Load\Member\CommonMemberLoad);
+    
+    $notFoundObjects = Classes\Factory\Model\Addition\MemberLoadAddition::add($memberLoadArray);
+    foreach ($notFoundObjects as $object) {
+        $name = $object->getProperty('name')->get();
+        echo "LOAD $name IS NOT FOUND<br/>";
+    }
+    
+    // UPLOAD NEW LOADS
+    Classes\Utils\Timer\Timer::start('LOADS_UPLOAD');
+    $memberLoadArray = $uploadFactory->upload('./Source/Excel/TAF2_PR-205a/PR-205a_Loads_new.xlsx',
             new \Classes\Instance\Load\Member\CommonMemberLoad);
     
     $notFoundObjects = Classes\Factory\Model\Addition\MemberLoadAddition::add($memberLoadArray);
@@ -107,6 +128,8 @@ try {
     
     // WRITE C++ FILE
     Classes\Factory\Export\Scad21ExportFactory::export("Model.cpp");
+    // WRITE JSON FILE
+    Classes\Factory\Export\JSONExportFactory::export("Model.json");
     
 } catch (Exception $e) {
     echo "Exception: " . $e->getMessage() . "</br>";
