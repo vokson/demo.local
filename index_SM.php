@@ -53,6 +53,17 @@ try {
         $name = $object->getProperty('name')->get();
         echo "LOAD $name IS NOT FOUND<br/>";
     }
+    
+    // CONCENTRATED LOADS UPLOAD
+    $memberLoadArray = $uploadFactory->upload('./Source/Excel/Small_Model/WO_Loads.xlsx',
+            new \Classes\Instance\Load\Member\ConcentratedCommonMemberLoad);
+    
+    $notFoundObjects = Classes\Factory\Model\Addition\ConcentratedMemberLoadAddition::add($memberLoadArray);
+    foreach ($notFoundObjects as $object) {
+        $name = $object->getProperty('name')->get();
+        echo "LOAD $name IS NOT FOUND<br/>";
+    }
+    
     echo "<br/>";
     
     Classes\Utils\Timer\Timer::stop('LOADS_UPLOAD');

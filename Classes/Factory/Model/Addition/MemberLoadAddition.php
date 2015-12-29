@@ -3,7 +3,7 @@
 namespace Classes\Factory\Model\Addition;
 
 /**
- * Class for addition Member Load to Model (sweepp line method)
+ * Class for addition Member Load to Model (sweep line method)
  *
  * @author Noskov Alexey
  */
