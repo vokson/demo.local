@@ -79,6 +79,16 @@ try {
     }
     echo "<br/>";
     
+    // CONCENTRATED LOADS UPLOAD
+    $memberLoadArray = $uploadFactory->upload('./Source/Excel/TAF2_PR-205a/PR-205a_WO_Loads.xlsx',
+            new \Classes\Instance\Load\Member\ConcentratedCommonMemberLoad);
+    
+    $notFoundObjects = Classes\Factory\Model\Addition\ConcentratedMemberLoadAddition::add($memberLoadArray);
+    foreach ($notFoundObjects as $object) {
+        $name = $object->getProperty('name')->get();
+        echo "LOAD $name IS NOT FOUND<br/>";
+    }
+    
     // UPLOAD WIND LOADS
     Classes\Utils\Timer\Timer::start('LOADS_UPLOAD');
     $memberLoadArray = $uploadFactory->upload('./Source/Excel/TAF2_PR-205a/PR-205a_Wind_Load.xlsx',
