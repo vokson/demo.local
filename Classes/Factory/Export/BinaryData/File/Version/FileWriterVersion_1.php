@@ -29,7 +29,7 @@ class FileWriterVersion_1 extends \Classes\Factory\Export\BinaryData\File\FileWr
         }
         
         // Write offset of docs' description
-        $data .= pack('I', strlen($data));
+        $data .= pack('I', strlen($data) + $totalCount + 4);
         
         // Write each document
         for ($i=0; $i < count($this->documents); $i++) {
@@ -48,6 +48,8 @@ class FileWriterVersion_1 extends \Classes\Factory\Export\BinaryData\File\FileWr
         
         // Two zero bytes in the end
         $data .= "\x00\x00";
+        
+        return $data;
     }
     
     /*
@@ -72,6 +74,6 @@ class FileWriterVersion_1 extends \Classes\Factory\Export\BinaryData\File\FileWr
         $docWriter->encode($nodes);
         
         $docDescription = $this->createDocumentDescription($docWriter);
-        $this->documents[] = $docDescription->body;
+        $this->documents[] = $docDescription;
     }
 }
