@@ -93,6 +93,8 @@ try {
     Classes\Factory\Export\Scad21ExportFactory::export("Model.cpp");
     // WRITE JSON FILE
     Classes\Factory\Export\JSONExportFactory::export("Model.json");
+    // WRITE BINARY FILE
+    Classes\Factory\Export\BinaryDataExportFactory::export("Model.bin");
     
 } catch (Exception $e) {
     echo "Exception: " . $e->getMessage() . "</br>";
