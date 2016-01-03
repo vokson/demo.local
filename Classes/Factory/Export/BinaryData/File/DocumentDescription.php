@@ -10,6 +10,7 @@ namespace Classes\Factory\Export\BinaryData\File;
 class DocumentDescription {
 
     public $number; // Document's number
+    public $version; // Document's version
     public $offset; // Document's offset
     public $count; // Document's count
     public $body; // Document's body

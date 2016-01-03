@@ -54,6 +54,14 @@ abstract class DocumentWriter {
         return $this->number;
     }
     
+    /* Get document version
+     * 
+     * @return int Doc's version
+     */
+    public function getDocumentVersion() {
+        return $this->version;
+    }
+    
      /*
      * Prepare binary data of object
      * 

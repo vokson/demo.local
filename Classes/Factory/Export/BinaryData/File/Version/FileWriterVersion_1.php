@@ -42,6 +42,7 @@ class FileWriterVersion_1 extends \Classes\Factory\Export\BinaryData\File\FileWr
         // Write doc's description
         for ($i=0; $i < count($this->documents); $i++) {
             $data .= pack('S', $this->documents[$i]->number);
+            $data .= pack('S', $this->documents[$i]->version);
             $data .= pack('I', $this->documents[$i]->offset);
             $data .= pack('I', $this->documents[$i]->count);
         }
@@ -63,6 +64,7 @@ class FileWriterVersion_1 extends \Classes\Factory\Export\BinaryData\File\FileWr
         $object = new \Classes\Factory\Export\BinaryData\File\DocumentDescription();
         
         $object->number = $docWriter->getDocumentNumber();
+        $object->version = $docWriter->getDocumentVersion();
         $object->body = $docWriter->getBody();
         
         return $object;

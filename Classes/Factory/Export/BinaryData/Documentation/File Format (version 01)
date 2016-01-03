@@ -5,9 +5,10 @@
 (..)			Documents' body
 
 * EACH DOCUMENT DESCRIPTION *
-(4)	u_int		Document number > 0
+(2)	u_short		Document number > 0
+(2)	u_short		Document version > 0
 (4)	u_int		Address of document
 (4)	u_int		Size of document in bytes
 
-(4)	u_int		End of file - 4 zero bytess
+(2)	u_short		End of file - 2 zero bytes
 	
