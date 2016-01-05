@@ -17,11 +17,12 @@ class NodeDocumentWriterVersion_1 extends \Classes\Factory\Export\BinaryData\Doc
     /*
      * Prepare binary data of object
      * 
+     * @param string $uin Object's uin
      * @param \Classes\Instance\Node\Node $object
      * 
      * @return string Binary data of encoded object
      */
-    protected function add($object) {
+    protected function add($uin, $object) {
         
         $data = '';
         

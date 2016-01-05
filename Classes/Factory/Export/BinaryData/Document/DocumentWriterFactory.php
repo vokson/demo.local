@@ -11,7 +11,10 @@ class DocumentWriterFactory {
     
     private static $maxAvailableVersion  = array(
         'Node' => 1,
-        'Member' => 1
+        'Member' => 1,
+        'RestraintConnection' => 1,
+        'Load' => 1,
+        'LoadCase' => 1
     );
     
     /*

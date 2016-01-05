@@ -17,11 +17,12 @@ class MemberDocumentWriterVersion_1 extends \Classes\Factory\Export\BinaryData\D
     /*
      * Prepare binary data of object
      * 
+     * @param string $uin Object's uin
      * @param \Classes\Instance\Member\Member $object
      * 
      * @return string Binary data of encoded object
      */
-    protected function add($object) {
+    protected function add($uin, $object) {
         
         $data = '';
         
@@ -29,7 +30,7 @@ class MemberDocumentWriterVersion_1 extends \Classes\Factory\Export\BinaryData\D
         $data .= pack('I', $object->getProperty('id')->get());
         
         // NODES
-        $objectConnections = \Classes\Factory\Model\Model::getHashTable()->getConnection($object->getUin());
+        $objectConnections = \Classes\Factory\Model\Model::getHashTable()->getConnection($uin);
         $nodeUins = array_keys($objectConnections);
         $idNode1 = \Classes\Factory\Model\Model::getNodes()[$nodeUins[0]]->getProperty('id')->get();
         $idNode2 = \Classes\Factory\Model\Model::getNodes()[$nodeUins[1]]->getProperty('id')->get();

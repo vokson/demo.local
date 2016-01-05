@@ -46,8 +46,8 @@ abstract class DocumentWriter {
         $body .= pack('I', count($objects));
         
         // Write objects one by one
-        foreach ($objects as $object) {
-            $body .= $this->add($object);
+        foreach ($objects as $key => $value) {
+            $body .= $this->add($key, $value);
         }
         
         $this->body = $body;
@@ -81,11 +81,12 @@ abstract class DocumentWriter {
      /*
      * Prepare binary data of object
      * 
+     * @param string $uin Object's uin
      * @param mixed[] $object Objects to add
      * 
      * @return string Binary data of encoded object
      */
-    abstract protected function add($object);
+    abstract protected function add($uin, $object);
     
     
     
