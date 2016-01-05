@@ -14,7 +14,7 @@ class GlobalCoordinateSystem extends \Classes\Factory\Connection\Connection{
      */
      function __construct() {
          // Set default connection
-         $this->connection = NULL;
+         $this->connection = 0;
     }
     
     public function get() {

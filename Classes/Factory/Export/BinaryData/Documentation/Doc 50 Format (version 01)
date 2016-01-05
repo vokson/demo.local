@@ -8,10 +8,9 @@
 (2)	u_short		Load case number
 (4)	u_int		ID of object load to be applied
 (2)	u_short		Type of load: 0 - nodal concentrated load
-                                      5 - member concentrated load in Local Coordinate System
-                                      7 - member distributed load in Local Coordinate System
-                                     15 - member concentrated load in Global Coordinate System
-                                     17 - member distributed load in Global Coordinate System
+                                      1 - member concentrated load
+                                      2 - member distributed load
+(2)	u_short		Load's coordinate system (0 - GLOBAL, 1 - LOCAL)
 (2)	u_short		Direction of load (FX=1, FY=2, FZ=3, MX=4, MY=5, MZ=6)
 (2)	u_short		Count of values in load information array: 1 - nodal concentrated load
                                                                    2 - member concentrated load

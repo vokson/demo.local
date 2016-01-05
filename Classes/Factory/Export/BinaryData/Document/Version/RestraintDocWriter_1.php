@@ -7,7 +7,7 @@ namespace Classes\Factory\Export\BinaryData\Document\Version;
  *
  * @author Noskov Alexey
  */
-class RestraintConnectionDocumentWriterVersion_1 extends \Classes\Factory\Export\BinaryData\Document\DocumentWriter {
+class RestraintDocWriter_1 extends \Classes\Factory\Export\BinaryData\Document\DocumentWriter {
     
     public function __construct() {
         $this->number = 30;

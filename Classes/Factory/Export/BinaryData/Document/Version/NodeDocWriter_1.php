@@ -7,7 +7,7 @@ namespace Classes\Factory\Export\BinaryData\Document\Version;
  *
  * @author Noskov Alexey
  */
-class NodeDocumentWriterVersion_1 extends \Classes\Factory\Export\BinaryData\Document\DocumentWriter {
+class NodeDocWriter_1 extends \Classes\Factory\Export\BinaryData\Document\DocumentWriter {
     
     public function __construct() {
         $this->number = 10;

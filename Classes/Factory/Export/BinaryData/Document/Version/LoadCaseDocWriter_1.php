@@ -7,10 +7,10 @@ namespace Classes\Factory\Export\BinaryData\Document\Version;
  *
  * @author Noskov Alexey
  */
-class LoadDocumentWriterVersion_1 extends \Classes\Factory\Export\BinaryData\Document\DocumentWriter {
+class LoadCaseDocWriter_1 extends \Classes\Factory\Export\BinaryData\Document\DocumentWriter {
 
     public function __construct() {
-        $this->number = 50;
+        $this->number = 40;
         $this->version = 1;
     }
 
@@ -18,7 +18,7 @@ class LoadDocumentWriterVersion_1 extends \Classes\Factory\Export\BinaryData\Doc
      * Prepare binary data of object
      * 
      * @param string $uin Object's uin
-     * @param \Classes\Instance\Load\Load $object
+     * @param \Classes\Instance\LoadCase\LoadCase $object
      * 
      * @return string Binary data of encoded object
      */
