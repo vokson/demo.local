@@ -16,8 +16,6 @@ class BinaryDataExportFactory extends ExportFactory {
      * @return void
      */
     public static function export($path) {
-        $nodes = \Classes\Factory\Model\Model::getNodes();
-//        self::$members = \Classes\Factory\Model\Model::getMembers();
 //        self::$restraints = \Classes\Factory\Model\Model::getRestraintTable()->getTable();
 //        self::$loadCases = \Classes\Factory\Model\Model::getLoadCases();
 //        self::$loads = \Classes\Factory\Model\Model::getLoads();
@@ -29,7 +27,8 @@ class BinaryDataExportFactory extends ExportFactory {
         $fileWriter = BinaryData\File\FileWriterFactory::make();
         
         // EXPORT
-        $fileWriter->nodesExport($nodes);
+        $fileWriter->nodesExport(\Classes\Factory\Model\Model::getNodes());
+        $fileWriter->membersExport(\Classes\Factory\Model\Model::getMembers());
         
         // WRITE
         file_put_contents($path, $fileWriter->getBody());

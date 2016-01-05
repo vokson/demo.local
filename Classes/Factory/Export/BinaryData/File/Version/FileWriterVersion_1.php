@@ -70,10 +70,27 @@ class FileWriterVersion_1 extends \Classes\Factory\Export\BinaryData\File\FileWr
         return $object;
     }
 
-
-    public function nodesExport($nodes) {
+    /*
+     * Export nodes
+     * 
+     * @param \Classes\Instance\Node\Node[] $objects
+     */
+    public function nodesExport($objects) {
         $docWriter = \Classes\Factory\Export\BinaryData\Document\DocumentWriterFactory::make('Node');
-        $docWriter->encode($nodes);
+        $docWriter->encode($objects);
+        
+        $docDescription = $this->createDocumentDescription($docWriter);
+        $this->documents[] = $docDescription;
+    }
+    
+    /*
+     * Export members
+     * 
+     * @param \Classes\Instance\Member\Member[] $objects
+     */
+     public function membersExport($objects) {
+        $docWriter = \Classes\Factory\Export\BinaryData\Document\DocumentWriterFactory::make('Member');
+        $docWriter->encode($objects);
         
         $docDescription = $this->createDocumentDescription($docWriter);
         $this->documents[] = $docDescription;

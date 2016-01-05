@@ -10,7 +10,8 @@ namespace Classes\Factory\Export\BinaryData\Document;
 class DocumentWriterFactory {
     
     private static $maxAvailableVersion  = array(
-        'Node' => 1
+        'Node' => 1,
+        'Member' => 1
     );
     
     /*

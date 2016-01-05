@@ -14,6 +14,22 @@ abstract class DocumentWriter {
     
     
     /*
+     * Prepare string for writing into binary file
+     * 
+     * @param string $inString Input string
+     * @param string $outString Output string
+     * 
+     * @return int Count of bytes in output string
+     */
+    
+    protected function prepareString ($inString, &$outString) {
+        $outString = iconv('UTF-8', 'Windows-1251', $inString)."\x00";
+        return strlen($outString);
+    }
+        
+
+
+    /*
      * Set body of document
      * 
      * @param mixed[] $objects Array of objects to export
