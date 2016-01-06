@@ -5,11 +5,11 @@
 (4)	u_int		Count of objects
 
 * EACH OBJECT *
-(4)	u_int		Load case number
+(2)	u_short		Load case number
 (2)	u_short		Count of bytes (N) in object's name (including 0x00 byte in the end)
-(N)     string          Name of object (0x00 byte in the end)
+(N) string      Name of object (0x00 byte in the end)
 (2)	u_short		Count of bytes (N) in object's description (including 0x00 byte in the end)
-(N)     string          Description of object (0x00 byte in the end)
+(N) string      Description of object (0x00 byte in the end)
 (2)	u_short		Count of coefficient for Mass Matrix Array
 
 * Each coefficient

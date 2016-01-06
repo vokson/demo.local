@@ -28,7 +28,7 @@ class LoadCaseDocWriter_1 extends \Classes\Factory\Export\BinaryData\Document\Do
         $data = '';
 
         // ID
-        $data .= pack('I', $object->getProperty('id')->get());
+        $data .= pack('S', $object->getProperty('id')->get());
 
         // NAME
         $name = '';

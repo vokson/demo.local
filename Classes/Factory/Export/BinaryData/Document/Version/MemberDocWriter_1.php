@@ -52,7 +52,7 @@ class MemberDocWriter_1 extends \Classes\Factory\Export\BinaryData\Document\Docu
         $data .=pack('S', $pin2);
         
         // BETA ANGLE
-        $data .= pack('s', $object->getProperty('betaAngle')->get());
+        $data .= pack('d', $object->getProperty('betaAngle')->get());
         
         // SECTION
         $section = '';
