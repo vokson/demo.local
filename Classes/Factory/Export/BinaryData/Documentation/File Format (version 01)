@@ -1,0 +1,14 @@
+(14)	string		File Header "*MODEL_DATA*"
+(2)     u_short         Version of file
+(4)	u_int		Address of documents' description
+
+(..)			Documents' body
+
+* EACH DOCUMENT DESCRIPTION *
+(2)	u_short		Document number > 0
+(2)	u_short		Document version > 0
+(4)	u_int		Address of document
+(4)	u_int		Size of document in bytes
+
+(2)	u_short		End of file - 2 zero bytes
+	

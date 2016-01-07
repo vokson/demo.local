@@ -1,0 +1,9 @@
+*** RESTRAINT ***
+
+(2)	u_short		Document number
+(2)	u_short		Version number
+(4)	u_int		Count of objects
+
+* EACH OBJECT *
+(4)	u_int		Node's ID
+(2)	u_short		Restraint	

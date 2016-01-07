@@ -1,0 +1,18 @@
+*** LOAD CASE ***
+
+(2)	u_short		Document number
+(2)	u_short		Version number
+(4)	u_int		Count of objects
+
+* EACH OBJECT *
+(2)	u_short		Load case number
+(2)	u_short		Count of bytes (N) in object's name (including 0x00 byte in the end)
+(N) string      Name of object (0x00 byte in the end)
+(2)	u_short		Count of bytes (N) in object's description (including 0x00 byte in the end)
+(N) string      Description of object (0x00 byte in the end)
+(2)	u_short		Count of coefficient for Mass Matrix Array
+
+* Each coefficient
+(2)	u_short		Load case number coefficient to be applied
+(8)	double		Coefficient for Load Case
+...

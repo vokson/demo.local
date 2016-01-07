@@ -14,7 +14,7 @@ class LocalCoordinateSystem extends \Classes\Factory\Connection\Connection{
      */
      function __construct() {
          // Set default connection
-         $this->connection = NULL;
+         $this->connection = 1;
     }
     
     public function get() {

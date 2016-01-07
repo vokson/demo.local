@@ -94,6 +94,8 @@ try {
     
     // WRITE C++ FILE
     Classes\Factory\Export\Scad21ExportFactory::export("Model.cpp");
+    // WRITE BINARY FILE
+    Classes\Factory\Export\BinaryDataExportFactory::export("Model.bin");
     
 } catch (Exception $e) {
     echo "Exception: " . $e->getMessage() . "</br>";

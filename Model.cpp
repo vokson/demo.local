@@ -1933,7 +1933,7 @@ massMatrixVector.push_back(0.95);
 massMatrixVector.push_back(0);
 massMatrixVector.push_back(0);
 massMatrixVector.push_back(0.5);
-this->loadCases.push_back(LoadCase(12,"Wind+Y Dynamic", "Type=2  Mode=7  Normative ReliabilityFactor=1.4 21 6 10 1 3 0 0 2 95 6 1 0 0.3 2 0", massMatrixVector));
+this->loadCases.push_back(LoadCase(12,"Wind+Y Dynamic", "Type=2  Mode=7  Normative ReliabilityFactor=1.4 21 20 10 1 3 0 0 2 95 6 1 0 0.3 2 0", massMatrixVector));
 massMatrixVector.clear();
 massMatrixVector.push_back(0);
 massMatrixVector.push_back(1);
@@ -1945,7 +1945,7 @@ massMatrixVector.push_back(0.95);
 massMatrixVector.push_back(0);
 massMatrixVector.push_back(0);
 massMatrixVector.push_back(0.5);
-this->loadCases.push_back(LoadCase(13,"Wind-Y Dynamic", "Type=2  Mode=7  Normative ReliabilityFactor=1.4 21 6 10 1 3 0 0 2 95 6 1 0 0.3 2 0", massMatrixVector));
+this->loadCases.push_back(LoadCase(13,"Wind-Y Dynamic", "Type=2  Mode=7  Normative ReliabilityFactor=1.4 21 20 11 1 3 0 0 2 95 6 1 0 0.3 2 0", massMatrixVector));
 // +++ LOADS +++
 std::vector <double> loadVector;
 loadVector.clear();
