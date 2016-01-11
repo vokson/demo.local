@@ -38,13 +38,13 @@ abstract class FileWriter {
      */
 
     protected function getClassName($obj) {
-    $classname = get_class($obj);
+        $classname = get_class($obj);
 
-    if (preg_match('@\\\\([\w]+)$@', $classname, $matches)) {
-        $classname = $matches[1];
+        if (preg_match('@\\\\([\w]+)$@', $classname, $matches)) {
+            $classname = $matches[1];
+        }
+
+        return $classname;
     }
-
-    return $classname;
-}
 
 }
